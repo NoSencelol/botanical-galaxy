@@ -235,6 +235,88 @@ dialog{background:linear-gradient(145deg,#18271d,#0f1913);border-color:#607c61;b
 @keyframes coronaTurn{to{transform:rotate(360deg)}}
 @media(max-width:570px){.network-canvas{height:490px}.net-node text{font-size:13px}.net-node .small{font-size:9px}}
 @media(prefers-reduced-motion:reduce){.network-canvas:before,.deep-space .distant-star,.net-edge,.net-node .corona{animation:none!important}}
+
+/* Archive Seed Bank inspired genetic web */
+#networkPanel{width:100%;margin:22px 0 28px;padding:0;border:0;background:transparent;overflow:visible;box-shadow:none}
+.network-explorer{display:grid;grid-template-columns:minmax(0,1fr) 320px;gap:10px;align-items:stretch;min-height:680px}
+.web-map-column{min-width:0;background:#050505;border:1px solid #262626;border-radius:17px;overflow:hidden;position:relative;box-shadow:0 22px 65px #0008}
+.web-map-heading{height:74px;padding:17px 20px;display:flex;align-items:center;justify-content:space-between;gap:14px;background:#070707;border-bottom:1px solid #252525}
+.web-map-heading .eyebrow{font-size:9px;letter-spacing:.2em;color:#aaa}
+.web-map-heading h3{font-size:21px;margin:3px 0 0;color:#f2f0e9;font-weight:650;letter-spacing:-.02em}
+.web-map-actions{display:flex;gap:7px;align-items:center}
+.map-control{width:34px;height:34px;border:1px solid #303030;border-radius:50%;background:#171717;color:#f6c63e;font-size:19px;font-weight:700;cursor:pointer;display:grid;place-items:center;transition:.18s}
+.map-control:hover{background:#242424;border-color:#72551a;transform:translateY(-1px)}
+.zoom-readout{width:auto;min-width:56px;padding:0 10px;border-radius:20px;font-size:11px;color:#ddd}
+.network-canvas.web-network-canvas{height:610px;min-height:510px;position:relative;overflow:hidden;touch-action:none;border:0;border-radius:0;background:radial-gradient(ellipse at 50% 47%,#11100a 0%,#060606 48%,#020202 100%);box-shadow:none}
+#networkSvg{width:100%;height:100%;min-width:0;display:block;position:relative;z-index:1;cursor:grab}
+#networkSvg:active{cursor:grabbing}
+.web-edge{stroke:#98721e;stroke-width:1.05;opacity:.42;fill:none;vector-effect:non-scaling-stroke}
+.web-edge.ancestor-edge{stroke:#f1f1ec;stroke-width:1.3;opacity:.83;filter:drop-shadow(0 0 3px #fff8)}
+.web-edge.cross-edge{stroke:#f4c43b;stroke-width:1.25;opacity:.78;filter:drop-shadow(0 0 3px #f4c43b55)}
+.web-node{cursor:pointer;outline:none}
+.web-node .node-dot{vector-effect:non-scaling-stroke}
+.archive-dot{fill:#f5c637;stroke:#f5c637;stroke-width:.6;filter:drop-shadow(0 0 2px #f5c63755)}
+.parent-dot{fill:#050505;stroke:#aaa9a3;stroke-width:1.15}
+.web-node.ancestor-node .archive-dot{fill:#fff;stroke:#fff;filter:drop-shadow(0 0 5px #fff)}
+.web-node.cross-node .archive-dot{fill:#ffd04b;stroke:#ffd04b;filter:drop-shadow(0 0 5px #ffd04b)}
+.web-node.selected-node .archive-dot{fill:#ffe073;stroke:#fff0b3;stroke-width:1.4;filter:drop-shadow(0 0 8px #ffd64c)}
+.web-node.selected-node .parent-dot{stroke:#ffd04b;stroke-width:1.7}
+.node-selection{fill:none;stroke:#f6d35f;stroke-width:1.2;opacity:.9;filter:drop-shadow(0 0 5px #f4c744)}
+.node-label{fill:#f8edc9;font:600 12px Inter,system-ui,sans-serif;text-anchor:middle;paint-order:stroke;stroke:#080808;stroke-width:3px;stroke-linejoin:round;pointer-events:none}
+.web-node:focus .node-selection{stroke:#fff;stroke-width:2}
+.web-map-legend{position:absolute;z-index:3;left:16px;bottom:18px;display:grid;gap:6px;padding:10px 12px;background:#050505c9;border-radius:10px;color:#d3d3d3;font-size:11px;backdrop-filter:blur(6px)}
+.web-map-legend>div{display:flex;align-items:center;gap:8px}
+.web-map-legend small{color:#858585;margin-top:2px}
+.legend-swatch{width:9px;height:9px;border-radius:50%;display:inline-block;flex:none}
+.legend-swatch.archive{background:#f5c637}
+.legend-swatch.parent{border:1px solid #aaa;background:transparent}
+.legend-swatch.selected{border:2px solid #f5d35d;box-shadow:0 0 5px #f5d35d}
+.web-map-help{position:absolute;right:16px;bottom:20px;color:#8b8b8b;font-size:10px;z-index:3;text-align:right}
+.web-sidebar{background:#090909;border:1px solid #242424;border-radius:17px;padding:25px 22px 20px;min-width:0;display:flex;flex-direction:column;color:#eee;box-shadow:0 22px 65px #0008}
+.web-sidebar-kicker{font-size:12px;line-height:1.2;font-weight:850;letter-spacing:.035em;color:#f0eee8}
+.web-intro{font-size:13px;line-height:1.48;color:#c7c7c7;margin:17px 0 0}
+.web-instruction{font-size:12px;color:#898989;margin:14px 0 0}
+.web-search-wrap{display:flex;flex-direction:column;gap:7px;margin-top:22px}
+.web-search-wrap span,.web-family-section h4{font-size:10px;font-weight:800;letter-spacing:.18em;color:#8e8e8e}
+.web-search-wrap input{height:39px;background:#101010;border:1px solid #363636;border-radius:22px;padding:0 14px;color:#eee;font:13px Inter,system-ui,sans-serif;outline:none}
+.web-search-wrap input:focus{border-color:#b28a22;box-shadow:0 0 0 2px #b28a2225}
+.web-family-section{margin-top:20px}
+.web-family-section h4{margin:0 0 10px}
+.web-family-list{display:flex;flex-wrap:wrap;gap:7px}
+.family-chip{display:inline-flex;align-items:center;gap:7px;max-width:100%;padding:8px 11px;border-radius:22px;border:1px solid #745714;background:#0b0b0b;color:#f5c637;font-size:12px;font-weight:700;cursor:pointer;transition:.18s}
+.family-chip span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.family-chip small{font-size:10px;color:#c4a64c}
+.family-chip:hover,.family-chip.active{background:#261d08;border-color:#d4a82a;box-shadow:0 0 13px #e0b62a20}
+.web-muted{font-size:12px;line-height:1.45;color:#777}
+.web-selected-panel{margin-top:23px;border-top:1px solid #292929;padding-top:17px}
+.web-selected-panel .web-sidebar-kicker{color:#8e8e8e;font-size:9px;letter-spacing:.18em}
+.web-selected-panel h3{font-size:18px;margin:9px 0 7px;color:#f4cf64;line-height:1.2}
+.web-selected-meta{font-size:11px;line-height:1.5;color:#aaa;overflow-wrap:anywhere}
+.web-edit-button{margin-top:13px;border:1px solid #785d1c;border-radius:20px;background:#17130a;color:#f3c744;padding:8px 13px;font-size:11px;font-weight:700;cursor:pointer}
+.web-edit-button:disabled{opacity:.35;cursor:default}
+.web-sidebar-foot{margin-top:auto;padding-top:22px;font-size:10px;line-height:1.45;color:#777}
+@media(max-width:980px){
+ .network-explorer{grid-template-columns:minmax(0,1fr) 285px}
+ .web-sidebar{padding:21px 18px}
+}
+@media(max-width:760px){
+ .network-explorer{grid-template-columns:1fr;min-height:0}
+ .network-canvas.web-network-canvas{height:520px;min-height:420px}
+ .web-sidebar{min-height:360px}
+ .web-map-heading{padding:14px}
+ .web-map-heading h3{font-size:18px}
+ .web-map-help{max-width:160px;line-height:1.4}
+}
+@media(max-width:420px){
+ .web-map-heading .eyebrow{font-size:8px}
+ .web-map-actions{gap:4px}
+ .map-control{width:30px;height:30px}
+ .zoom-readout{min-width:48px;font-size:10px}
+ .network-canvas.web-network-canvas{height:440px}
+ .web-map-legend{left:8px;bottom:9px;padding:8px;font-size:10px}
+ .web-map-help{right:9px;bottom:10px;font-size:9px;max-width:124px}
+}
+
 </style>
 </head>
 <body>
@@ -254,14 +336,55 @@ dialog{background:linear-gradient(145deg,#18271d,#0f1913);border-color:#607c61;b
     <div class="stats"><div class="stat"><strong id="totalCount">0</strong><span>Sorten in deiner Sammlung</span></div><div class="stat"><strong id="photoCount">0</strong><span>Mit Bild dokumentiert</span></div></div>
   </section>
   <section id="networkPanel" class="network-panel" hidden>
-    <div class="network-top">
-      <div><div class="eyebrow">Genetische Verbindungen</div><h3>Dein Sortensystem</h3><p>Elternlinien, Kreuzungen und gemeinsame Vorfahren auf einen Blick. Kreuzungsnamen werden in einzelne Genetik-Knoten zerlegt. Klicke einen Knoten an, um einen Eintrag zu öffnen.</p></div>
-      <div class="network-controls"><select id="focusFilter" class="filter"><option value="">Alle Sorten anzeigen</option></select><button class="btn" id="zoomOut" type="button" title="Verkleinern">−</button><button class="btn" id="zoomReadout" type="button" title="Zoom zurücksetzen">100%</button><button class="btn" id="zoomIn" type="button" title="Vergrößern">＋</button><button class="btn" id="resetNetwork">Ansicht zurücksetzen</button></div>
+  <div class="network-explorer">
+    <div class="web-map-column">
+      <div class="web-map-heading">
+        <div>
+          <div class="eyebrow">BOTANICAL GALAXY / GENETIC ARCHIVE</div>
+          <h3>Dein Sortennetz</h3>
+        </div>
+        <div class="web-map-actions">
+          <button class="map-control" id="zoomIn" type="button" title="Vergrößern">+</button>
+          <button class="map-control" id="zoomOut" type="button" title="Verkleinern">−</button>
+          <button class="map-control zoom-readout" id="zoomReadout" type="button" title="Ansicht zurücksetzen">100%</button>
+          <button class="map-control" id="resetNetwork" type="button" title="Ansicht zentrieren">⌖</button>
+        </div>
+      </div>
+      <div class="network-canvas web-network-canvas">
+        <svg id="networkSvg" viewBox="0 0 1200 850" role="img" aria-label="Interaktive Genetik-Karte deiner Sortensammlung"></svg>
+        <div class="web-map-legend">
+          <div><i class="legend-swatch archive"></i> Archive strain</div>
+          <div><i class="legend-swatch parent"></i> Parent line</div>
+          <div><i class="legend-swatch selected"></i> Ausgewählte Familie</div>
+          <small>Größerer Punkt = mehr Kreuzungen</small>
+        </div>
+        <div class="web-map-help">Ziehen zum Verschieben · Scrollen oder Pinch zum Zoomen</div>
+      </div>
     </div>
-    <div class="network-legend"><span><i class="legend-dot filled"></i> Sorte in deiner Sammlung</span><span><i class="legend-dot hollow"></i> Elternlinie noch nicht angelegt</span><span class="legend-line"></span> Elternteil → Nachkomme</div>
-    <div class="network-canvas"><svg id="networkSvg" viewBox="0 0 1000 620" role="img" aria-label="Interaktives Netzwerk deiner Sortengenetik"></svg></div>
-    <div class="network-foot" id="networkHint">Ergänze bei deinen Sorten die beiden Elternlinien, damit sich das Netzwerk aufbaut.</div>
-  </section>
+    <aside class="web-sidebar">
+      <div class="web-sidebar-kicker">HOW TO READ THE WEB</div>
+      <p class="web-intro">Jeder gelbe Punkt ist eine Sorte in deinem Archiv. Linien führen zu ihren Eltern. Graue Ringe markieren Elternlinien, die noch nicht in deiner Sammlung sind.</p>
+      <p class="web-intro">Wähle einen Punkt, eine Familie oder suche nach einem Namen. Die Vorfahren leuchten weiß auf, die Kreuzungen gelb.</p>
+      <p class="web-instruction">Ziehen zum Verschieben. Scrollen oder Pinch zum Zoomen.</p>
+      <label class="web-search-wrap">
+        <span>STRAIN SEARCH</span>
+        <input id="webSearch" type="search" placeholder="Sorte suchen …" autocomplete="off">
+      </label>
+      <div class="web-family-section">
+        <h4>START WITH A FAMILY</h4>
+        <div id="familyList" class="web-family-list"><span class="web-muted">Deine Familien erscheinen hier, sobald Sorten gespeichert sind.</span></div>
+      </div>
+      <div id="selectedPanel" class="web-selected-panel">
+        <div class="web-sidebar-kicker">SELECTED STRAIN</div>
+        <h3 id="selectedName">Noch keine Sorte ausgewählt</h3>
+        <div id="selectedMeta" class="web-selected-meta">Wähle einen gelben Punkt im Netzwerk aus.</div>
+        <button class="web-edit-button" id="editSelected" type="button" disabled>Eintrag bearbeiten</button>
+      </div>
+      <div id="networkHint" class="web-sidebar-foot">0 gespeicherte Sorten · Füge Sorten und ihre Elternlinien hinzu, um dein Netzwerk aufzubauen.</div>
+    </aside>
+  </div>
+  <select id="focusFilter" hidden><option value="">Alle Sorten anzeigen</option></select>
+</section>
   <div class="toolbar">
     <input class="search" id="search" placeholder="⌕  Sorten, Genetik oder Notizen suchen …">
     <select class="filter" id="typeFilter"><option value="">Alle Kategorien</option><option>Indica</option><option>Sativa</option><option>Hybrid</option><option>Unbekannt</option></select>
@@ -388,7 +511,8 @@ $('importBtn').onclick=()=>$('importFile').click();
 $('importFile').onchange=async e=>{const f=e.target.files[0];if(!f)return;try{const data=JSON.parse(await f.text());if(!Array.isArray(data)||!data.every(x=>x&&typeof x.name==='string'))throw Error();if(confirm('Import ergänzt deine aktuelle Sammlung. Vorhandene Sorten bleiben erhalten; gleiche IDs bzw. gleiche Namen werden aktualisiert. Fortfahren?')){const merged=new Map();[...strains,...data].forEach(item=>{const k=item.id||('name:'+item.name.trim().toLowerCase());merged.set(k,{...(merged.get(k)||{}),...item})});strains=[...merged.values()];if(await save()){render();if(!$('networkPanel').hidden)buildNetwork();alert('Import abgeschlossen: vorhandene Sorten wurden beibehalten und neue ergänzt.')}}}catch(err){alert('Die Datei konnte nicht als Archiv gelesen werden.')}e.target.value=''};
 
 // Sortensystem: Zoom und Verschieben
-let netWorldW=1000, netWorldH=620, netZoom=1, netPanX=0, netPanY=0, netDragging=false, netLastX=0, netLastY=0;
+let netWorldW=1200, netWorldH=850, netZoom=1, netPanX=0, netPanY=0, netDragging=false, netLastX=0, netLastY=0;
+let netPointers=new Map(), netPinchStart=0, netPinchZoom=1, networkSelected=null;
 function updateNetView(){
  const world=$('networkWorld');
  if(world)world.setAttribute('transform',`translate(${netPanX} ${netPanY}) scale(${netZoom})`);
@@ -401,191 +525,236 @@ function changeNetZoom(next){
 }
 function resetNetView(){netZoom=1;netPanX=0;netPanY=0;updateNetView()}
 function buildNetwork(){
- const panel=$('networkPanel'), svg=$('networkSvg'), focus=$('focusFilter');
- const old=focus.value;
- focus.innerHTML='<option value="">Alle Sorten anzeigen</option>'+strains.map(s=>`<option value="${esc(s.id)}">${esc(s.name)}</option>`).join('');
- focus.value=strains.some(s=>s.id===old)?old:'';
- const nodes=new Map(), edges=[];
- strains.forEach(s=>nodes.set('s:'+s.id,{key:'s:'+s.id,name:s.name,strain:s,placeholder:false}));
- function normGeneticName(value){
-   return String(value||'').normalize('NFKD').replace(/[\\u0300-\\u036f]/g,'')
-     .toLowerCase().replace(/\\b(the|strain)\\b/g,'').replace(/[^a-z0-9]+/g,' ').trim();
- }
- function splitLineage(value){
-   // Unterstützt z. B. "Do-Si-Dos x Purple Punch", "A × B" und mehrstufige Kreuzungen.
-   return String(value||'').split(/\\s*(?:x|×|\\*|\\+|\\bby\\b)\\s*/i).map(v=>v.trim()).filter(Boolean);
- }
- const aliases=new Map();
- strains.forEach(s=>{
-   const key='s:'+s.id;
-   [s.name,...splitLineage(s.genetics)].forEach(label=>{
-     const norm=normGeneticName(label);if(norm&&!aliases.has(norm))aliases.set(norm,key);
-   });
+ const svg=$('networkSvg'), familyList=$('familyList'), search=$('webSearch');
+ const nodes=new Map(), edges=[], aliases=new Map();
+ const norm=value=>String(value||'').normalize('NFKD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/\b(the|strain)\b/g,'').replace(/[^a-z0-9]+/g,' ').trim();
+ const split=value=>String(value||'').split(/\s*(?:×|\*|\+|\bx\b|\bby\b)\s*/i).map(v=>v.trim()).filter(Boolean);
+ strains.forEach((s,i)=>{
+   const key='s:'+(s.id||norm(s.name)||i);
+   nodes.set(key,{key,name:s.name,strain:s,placeholder:false,index:i});
+   [s.name,...split(s.genetics)].forEach(label=>{const n=norm(label);if(n&&!aliases.has(n))aliases.set(n,key)});
  });
- strains.forEach(s=>{
-   const child='s:'+s.id;
-   const parents=[s.parent1,s.parent2].filter(Boolean).flatMap(v=>splitLineage(v));
-   // Die Kreuzung im Genetik-Feld liefert ebenfalls gemeinsame Vorfahren/Komponenten.
-   const geneticsParts=splitLineage(s.genetics);
-   const all=[...parents,...geneticsParts];
+ strains.forEach((s,i)=>{
+   const child='s:'+(s.id||norm(s.name)||i);
+   const parentNames=[s.parent1,s.parent2].filter(Boolean).flatMap(split).concat(split(s.genetics));
    const seen=new Set();
-   all.forEach(parent=>{
-     const norm=normGeneticName(parent);if(!norm||seen.has(norm))return;seen.add(norm);
-     const matchedKey=aliases.get(norm);
-     // Eine Sorte soll nicht mit sich selbst verbunden werden.
-     const key=matchedKey&&matchedKey!==child?matchedKey:'p:'+norm;
-     const existing=nodes.get(key);
-     if(!existing)nodes.set(key,{key,name:parent,strain:null,placeholder:true});
+   parentNames.forEach(parent=>{
+     const n=norm(parent);if(!n||seen.has(n))return;seen.add(n);
+     const matched=aliases.get(n);
+     if(matched===child)return;
+     const key=matched||('p:'+n);
+     if(!nodes.has(key))nodes.set(key,{key,name:parent,strain:null,placeholder:true,index:nodes.size});
      if(!edges.some(e=>e.from===key&&e.to===child))edges.push({from:key,to:child});
    });
  });
- let arr=[...nodes.values()];
- if(!arr.length){svg.innerHTML='<text x="500" y="300" fill="#9aaa9e" text-anchor="middle" font-size="17">Noch keine Sorten vorhanden — füge Sorten und ihre Eltern hinzu.</text>';$('networkHint').textContent='Sobald du Elternlinien einträgst, entsteht hier dein Sortensystem.';return}
- let active=focus.value;
- if(active){
-   const connected=new Set([ 's:'+active ]);
-   let changed=true;
-   while(changed){changed=false;edges.forEach(e=>{if(connected.has(e.to)&&!connected.has(e.from)){connected.add(e.from);changed=true}if(connected.has(e.from)&&!connected.has(e.to)){connected.add(e.to);changed=true}})}
-   arr=arr.filter(n=>connected.has(n.key));
+ const arr=[...nodes.values()];
+ if(!arr.length){
+   svg.innerHTML='<text x="600" y="425" fill="#8d8d8d" text-anchor="middle" font-size="18">Noch keine Sorten im Archiv</text>';
+   familyList.innerHTML='<span class="web-muted">Füge zuerst Sorten hinzu.</span>';
+   $('selectedName').textContent='Noch keine Sorte ausgewählt';
+   $('selectedMeta').textContent='Füge einen Sorteneintrag hinzu, um dein Netzwerk aufzubauen.';
+   $('editSelected').disabled=true;
+   $('networkHint').textContent='0 gespeicherte Sorten · Noch keine Verbindungen vorhanden.';
+   return;
  }
- const visible=new Set(arr.map(n=>n.key)), links=edges.filter(e=>visible.has(e.from)&&visible.has(e.to));
- const degree=new Map(arr.map(n=>[n.key,0]));
- links.forEach(e=>{degree.set(e.from,(degree.get(e.from)||0)+1);degree.set(e.to,(degree.get(e.to)||0)+1)});
- // Verbundene Sortengruppen ermitteln: voneinander unabhängige Linien erhalten eigene Bereiche.
- const byKeyTemp=new Map(arr.map(n=>[n.key,n]));
+ const byKey=new Map(arr.map(n=>[n.key,n]));
+ const parentsByChild=new Map(arr.map(n=>[n.key,[]]));
+ const childrenByParent=new Map(arr.map(n=>[n.key,[]]));
+ edges.forEach(e=>{parentsByChild.get(e.to)?.push(e.from);childrenByParent.get(e.from)?.push(e.to)});
  const adjacency=new Map(arr.map(n=>[n.key,new Set()]));
- links.forEach(e=>{adjacency.get(e.from)?.add(e.to);adjacency.get(e.to)?.add(e.from)});
- const components=[], visited=new Set();
+ edges.forEach(e=>{adjacency.get(e.from)?.add(e.to);adjacency.get(e.to)?.add(e.from)});
+ const components=[],visited=new Set();
  arr.forEach(n=>{
    if(visited.has(n.key))return;
-   const stack=[n.key], group=[];visited.add(n.key);
+   const stack=[n.key],group=[];visited.add(n.key);
    while(stack.length){
-     const key=stack.pop(), node=byKeyTemp.get(key);
-     if(node)group.push(node);
-     (adjacency.get(key)||[]).forEach(next=>{if(!visited.has(next)){visited.add(next);stack.push(next)}});
+     const k=stack.pop(),item=byKey.get(k);if(item)group.push(item);
+     (adjacency.get(k)||[]).forEach(next=>{if(!visited.has(next)){visited.add(next);stack.push(next)}});
    }
    components.push(group);
  });
+ const componentOf=new Map();
+ components.forEach((group,i)=>group.forEach(n=>componentOf.set(n.key,i)));
+ const familyCounts=components.map(group=>group.length);
+ const degree=new Map(arr.map(n=>[n.key,0]));
+ edges.forEach(e=>{degree.set(e.from,(degree.get(e.from)||0)+1);degree.set(e.to,(degree.get(e.to)||0)+1)});
 
- const largest=Math.max(1,...components.map(c=>c.length));
- const cellW=Math.max(340,Math.ceil(Math.sqrt(largest))*175);
- const cellH=Math.max(300,Math.ceil(Math.sqrt(largest))*165);
+ // The layout is a single connected web, with separate families arranged around the same map.
+ const worldW=Math.max(1200,Math.ceil(Math.sqrt(arr.length))*105);
+ const worldH=Math.max(850,Math.ceil(arr.length/Math.max(1,Math.floor(worldW/110)))*100);
+ netWorldW=worldW;netWorldH=worldH;
+ svg.setAttribute('viewBox','0 0 '+worldW+' '+worldH);
  const cols=Math.max(1,Math.ceil(Math.sqrt(components.length)));
  const rows=Math.ceil(components.length/cols);
- const worldW=Math.max(1000,cols*cellW+100), worldH=Math.max(620,rows*cellH+100);
- netWorldW=worldW;netWorldH=worldH;
- svg.setAttribute('viewBox',`0 0 ${worldW} ${worldH}`);
- // Jede Gruppe bekommt eine eigene Zelle. Innerhalb der Zelle werden Knoten abgestoßen
- // und direkte Eltern-Kind-Verbindungen auf angenehmem Abstand gehalten.
+ const cellW=worldW/cols,cellH=worldH/rows;
  components.forEach((group,gi)=>{
-   const col=gi%cols,row=Math.floor(gi/cols);
-   const cx=50+col*cellW+cellW/2,cy=50+row*cellH+cellH/2;
-   const count=group.length, radius=Math.max(45,Math.min(cellW,cellH)*.28, count*19);
+   const cx=cellW*(gi%cols+.5),cy=cellH*(Math.floor(gi/cols)+.5);
+   const count=group.length,spread=Math.min(cellW,cellH)*.29;
    group.forEach((n,i)=>{
-     const a=2*Math.PI*i/count-Math.PI/2;
-     n.x=cx+Math.cos(a)*radius;n.y=cy+Math.sin(a)*radius;n.vx=0;n.vy=0;
+     const angle=i*2.399963229728653+gi*.81;
+     const radius=count===1?0:Math.min(spread,22+Math.sqrt(i+1)*spread*.45);
+     n.x=cx+Math.cos(angle)*radius;
+     n.y=cy+Math.sin(angle)*radius*.78;
+     n.vx=0;n.vy=0;
    });
-   const groupKeys=new Set(group.map(n=>n.key));
-   const groupLinks=links.filter(e=>groupKeys.has(e.from)&&groupKeys.has(e.to));
-   for(let step=0;step<260;step++){
+   const keys=new Set(group.map(n=>n.key));
+   const familyEdges=edges.filter(e=>keys.has(e.from)&&keys.has(e.to));
+   const ideal=Math.max(34,Math.min(82,450/Math.sqrt(count)));
+   const iterations=count>500?55:count>250?80:125;
+   for(let step=0;step<iterations;step++){
      group.forEach((a,i)=>{
-       group.slice(i+1).forEach(b=>{
-         let dx=a.x-b.x,dy=a.y-b.y,d=Math.sqrt(dx*dx+dy*dy)||1;
-         const min=138,force=d<min?(min-d)*.055:1700/(d*d);
-         a.vx+=dx/d*force;b.vx-=dx/d*force;
-         a.vy+=dy/d*force;b.vy-=dy/d*force;
-       });
+       for(let j=i+1;j<group.length;j++){
+         const b=group[j],dx=a.x-b.x,dy=a.y-b.y,d=Math.sqrt(dx*dx+dy*dy)||.01;
+         const force=(ideal*ideal*.9)/(d*d);
+         a.vx+=(dx/d)*force;b.vx-=(dx/d)*force;
+         a.vy+=(dy/d)*force;b.vy-=(dy/d)*force;
+       }
      });
-     groupLinks.forEach(e=>{
-       const a=byKeyTemp.get(e.from),b=byKeyTemp.get(e.to);if(!a||!b)return;
-       let dx=b.x-a.x,dy=b.y-a.y,d=Math.sqrt(dx*dx+dy*dy)||1;
-       const force=(d-155)*.0025;
-       a.vx+=dx*force;a.vy+=dy*force;b.vx-=dx*force;b.vy-=dy*force;
+     familyEdges.forEach(e=>{
+       const a=byKey.get(e.from),b=byKey.get(e.to);if(!a||!b)return;
+       const dx=b.x-a.x,dy=b.y-a.y,d=Math.sqrt(dx*dx+dy*dy)||1;
+       const force=(d-ideal*1.55)*.0038;
+       a.vx+=(dx/d)*force;b.vx-=(dx/d)*force;
+       a.vy+=(dy/d)*force;b.vy-=(dy/d)*force;
      });
      group.forEach(n=>{
-       n.vx+=(cx-n.x)*.0018;n.vy+=(cy-n.y)*.0018;
+       n.vx+=(cx-n.x)*.0017;n.vy+=(cy-n.y)*.0017;
        n.vx*=.78;n.vy*=.78;n.x+=n.vx;n.y+=n.vy;
-       n.x=Math.max(cx-cellW/2+65,Math.min(cx+cellW/2-65,n.x));
-       n.y=Math.max(cy-cellH/2+65,Math.min(cy+cellH/2-65,n.y));
+       n.x=Math.max(cellW*(gi%cols)+34,Math.min(cellW*(gi%cols+1)-34,n.x));
+       n.y=Math.max(cellH*Math.floor(gi/cols)+34,Math.min(cellH*(Math.floor(gi/cols)+1)-34,n.y));
      });
    }
  });
- const byKey=new Map(arr.map(n=>[n.key,n]));
- let out='<defs>' +
-  '<radialGradient id="sphereCollection" cx="31%" cy="25%" r="78%"><stop offset="0" stop-color="#f1ffe0"/><stop offset=".13" stop-color="#c7f0a9"/><stop offset=".38" stop-color="#78b77e"/><stop offset=".7" stop-color="#315c43"/><stop offset="1" stop-color="#09170f"/></radialGradient>' +
-  '<radialGradient id="sphereParent" cx="30%" cy="23%" r="78%"><stop offset="0" stop-color="#f4fbff"/><stop offset=".16" stop-color="#b8d6e5"/><stop offset=".42" stop-color="#66869c"/><stop offset=".76" stop-color="#273b4c"/><stop offset="1" stop-color="#09121d"/></radialGradient>' +
-  '<radialGradient id="sphereHub" cx="32%" cy="23%" r="78%"><stop offset="0" stop-color="#fffef0"/><stop offset=".15" stop-color="#fff0b6"/><stop offset=".42" stop-color="#efc967"/><stop offset=".74" stop-color="#a96a32"/><stop offset="1" stop-color="#271a16"/></radialGradient>' +
-  '<radialGradient id="auraGreen"><stop offset="0" stop-color="#a9e7a6" stop-opacity=".35"/><stop offset=".42" stop-color="#83c3a0" stop-opacity=".12"/><stop offset="1" stop-color="#83c3a0" stop-opacity="0"/></radialGradient>' +
-  '<radialGradient id="auraBlue"><stop offset="0" stop-color="#b9dfff" stop-opacity=".3"/><stop offset=".5" stop-color="#86bce8" stop-opacity=".1"/><stop offset="1" stop-color="#86bce8" stop-opacity="0"/></radialGradient>' +
-  '<radialGradient id="auraGold"><stop offset="0" stop-color="#ffe9a5" stop-opacity=".54"/><stop offset=".48" stop-color="#ffcf70" stop-opacity=".16"/><stop offset="1" stop-color="#ffcf70" stop-opacity="0"/></radialGradient>' +
-  '<linearGradient id="connectionGradient" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#9cd4b0" stop-opacity=".14"/><stop offset=".48" stop-color="#d8e9dc" stop-opacity=".92"/><stop offset="1" stop-color="#a3c8ed" stop-opacity=".22"/></linearGradient>' +
-  '<filter id="glow"><feGaussianBlur stdDeviation="5" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>' +
-  '<filter id="bloom"><feGaussianBlur stdDeviation="12"/></filter>' +
-  '<filter id="softShadow" x="-80%" y="-80%" width="260%" height="260%"><feGaussianBlur in="SourceAlpha" stdDeviation="7" result="blur"/><feOffset dy="7" result="off"/><feComponentTransfer in="off"><feFuncA type="linear" slope=".42"/></feComponentTransfer><feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge></filter>' +
-  '<clipPath id="sphereClip"><circle r="34"/></clipPath>' +
- '</defs><g id="networkWorld">';
- // Atmosphärische Nebelwolken und feine Sternenfelder für mehr räumliche Tiefe.
- out+='<g class="nebula" pointer-events="none">' +
-  '<ellipse cx="'+(worldW*.24)+'" cy="'+(worldH*.3)+'" rx="'+(worldW*.21)+'" ry="'+(worldH*.19)+'" fill="#668bb7" opacity=".16" filter="url(#bloom)"/>' +
-  '<ellipse cx="'+(worldW*.72)+'" cy="'+(worldH*.69)+'" rx="'+(worldW*.25)+'" ry="'+(worldH*.22)+'" fill="#7a568e" opacity=".13" filter="url(#bloom)"/>' +
-  '<ellipse cx="'+(worldW*.52)+'" cy="'+(worldH*.47)+'" rx="'+(worldW*.17)+'" ry="'+(worldH*.15)+'" fill="#527f78" opacity=".1" filter="url(#bloom)"/></g>';
- const starSeed=(i)=>{const x=(i*137.508+23)%worldW,y=(i*91.713+47)%worldH,r=i%23===0?1.8:(.45+(i%5)*.22),op=.18+(i%7)*.075;return i%23===0?`<g class="distant-star" opacity="${op}"><circle cx="${x}" cy="${y}" r="${r}" fill="#f2f7ff"/><path d="M ${x-r*3} ${y} H ${x+r*3} M ${x} ${y-r*3} V ${y+r*3}" stroke="#dbeeff" stroke-width=".55"/></g>`:`<circle class="distant-star" cx="${x}" cy="${y}" r="${r}" fill="#dceaff" opacity="${op}"/>`};
- out+=`<g class="deep-space">${Array.from({length:Math.min(260,Math.max(110,Math.floor(worldW*worldH/5200)))},(_,i)=>starSeed(i)).join('')}</g>`;
- // Sanfte, leicht gekrümmte Lichtbahnen statt harter, gestrichelter Verbindungslinien.
- links.forEach((e,i)=>{
+ const selected=networkSelected&&byKey.has(networkSelected)?networkSelected:null;
+ const ancestors=new Set(),descendants=new Set();
+ if(selected){
+   const stack=[selected];
+   while(stack.length){const k=stack.pop();(parentsByChild.get(k)||[]).forEach(parent=>{if(!ancestors.has(parent)){ancestors.add(parent);stack.push(parent)}})}
+   const down=[selected];
+   while(down.length){const k=down.pop();(childrenByParent.get(k)||[]).forEach(child=>{if(!descendants.has(child)){descendants.add(child);down.push(child)}})}
+ }
+ // The sidebar family chips represent connected groups, ranked by archive entries and crossings.
+ const candidates=arr.filter(n=>n.strain).sort((a,b)=>(familyCounts[componentOf.get(b.key)]||0)-(familyCounts[componentOf.get(a.key)]||0)||(degree.get(b.key)||0)-(degree.get(a.key)||0));
+ const familySeeds=[],usedFamilies=new Set();
+ candidates.forEach(n=>{const ci=componentOf.get(n.key);if(usedFamilies.has(ci))return;usedFamilies.add(ci);familySeeds.push(n)});
+ familyList.innerHTML=familySeeds.slice(0,8).map(n=>{
+   const count=familyCounts[componentOf.get(n.key)]||1;
+   return '<button type="button" class="family-chip '+(selected===n.key?'active':'')+'" data-family="'+esc(n.key)+'"><span>'+esc(n.name)+'</span><small>'+Math.max(1,count-1)+'</small></button>';
+ }).join('')||'<span class="web-muted">Noch keine Familien vorhanden.</span>';
+
+ const selectedNode=selected?byKey.get(selected):null;
+ if(selectedNode){
+   $('selectedName').textContent=selectedNode.name;
+   $('selectedMeta').textContent=selectedNode.strain?
+    [selectedNode.strain.breeder||'Breeder nicht angegeben',selectedNode.strain.genetics||'Genetik nicht angegeben',selectedNode.strain.type||'Kategorie unbekannt'].join(' · '):
+    'Elternlinie · noch nicht als eigene Sorte im Archiv gespeichert';
+   $('editSelected').disabled=false;
+   $('editSelected').textContent=selectedNode.strain?'Eintrag bearbeiten':'Elternlinie hinzufügen';
+ }else{
+   $('selectedName').textContent='Noch keine Sorte ausgewählt';
+   $('selectedMeta').textContent='Wähle einen gelben Punkt, um seine Vorfahren und Kreuzungen hervorzuheben.';
+   $('editSelected').disabled=true;
+   $('editSelected').textContent='Eintrag bearbeiten';
+ }
+ const q=search?search.value.trim().toLowerCase():'';
+ const unmatched=q&&!arr.some(n=>n.name.toLowerCase().includes(q));
+ $('networkHint').textContent=unmatched?'Keine Sorte mit diesem Namen gefunden.':strains.length+' gespeicherte Sorten · '+arr.filter(n=>n.strain).length+' gelbe Sorten · '+arr.filter(n=>n.placeholder).length+' offene Elternlinien · '+edges.length+' Verbindungen.';
+ let out='<defs><filter id="webGlow" x="-200%" y="-200%" width="500%" height="500%"><feGaussianBlur stdDeviation="5" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs><g id="networkWorld">';
+ // Restrained black map with a very subtle warm centre glow and small background stars.
+ out+='<ellipse cx="'+(worldW*.49)+'" cy="'+(worldH*.48)+'" rx="'+(worldW*.48)+'" ry="'+(worldH*.47)+'" fill="#c18b20" opacity=".022"/>';
+ const starCount=Math.min(220,Math.max(75,Math.floor(worldW*worldH/6200)));
+ for(let i=0;i<starCount;i++){
+   const x=(i*137.508+31)%worldW,y=(i*91.713+17)%worldH,r=.35+(i%4)*.16;
+   out+='<circle cx="'+x.toFixed(1)+'" cy="'+y.toFixed(1)+'" r="'+r.toFixed(2)+'" fill="#d8c28b" opacity="'+(.08+(i%4)*.035)+'"/>';
+ }
+ edges.forEach(e=>{
    const a=byKey.get(e.from),b=byKey.get(e.to);if(!a||!b)return;
-   const dx=b.x-a.x,dy=b.y-a.y,len=Math.sqrt(dx*dx+dy*dy)||1;
-   const nx=-dy/len,ny=dx/len,bend=((i%2)?1:-1)*Math.min(58,len*.2);
-   const mx=(a.x+b.x)/2+nx*bend,my=(a.y+b.y)/2+ny*bend;
-   const d=`M ${a.x} ${a.y} Q ${mx} ${my} ${b.x} ${b.y}`;
-   out+=`<path class="net-edge root-shadow" d="${d}"/><path class="net-edge" d="${d}"/><path class="net-edge fine" d="${d}"/>`;
-   out+=`<circle class="travel-light" r="2.5" fill="#f2ffe8" filter="url(#glow)"><animateMotion dur="${5+i*1.3}s" repeatCount="indefinite" path="${d}"/></circle>`;
+   const isAnc=selected&&(ancestors.has(e.from)||e.from===selected)&&(ancestors.has(e.to)||e.to===selected);
+   const isCross=selected&&(descendants.has(e.from)||e.from===selected)&&(descendants.has(e.to)||e.to===selected);
+   const cls=isAnc?'web-edge ancestor-edge':isCross?'web-edge cross-edge':'web-edge';
+   out+='<line class="'+cls+'" x1="'+a.x.toFixed(2)+'" y1="'+a.y.toFixed(2)+'" x2="'+b.x.toFixed(2)+'" y2="'+b.y.toFixed(2)+'"/>';
  });
- // Kugelförmige Himmelskörper mit Lichtkante, Schatten und Atmosphärenhalo.
  arr.forEach(n=>{
-   const isParent=n.placeholder,connections=degree.get(n.key)||0,hub=!isParent&&connections>=2;
-   const label=n.name.length>20?n.name.slice(0,18)+'…':n.name;
-   const r=isParent?19:(hub?31:24);
-   const detail=n.strain?`${n.name} · ${n.strain.type||'Kategorie unbekannt'} · ${n.strain.breeder||'Breeder unbekannt'}${n.strain.genetics?' · '+n.strain.genetics:''}${n.strain.parent1||n.strain.parent2?' · Eltern: '+[n.strain.parent1,n.strain.parent2].filter(Boolean).join(' × '):''}`:`${n.name} · Noch kein eigener Sorteneintrag`;
-   const sphere=isParent?'sphereParent':(hub?'sphereHub':'sphereCollection');
-   const aura=isParent?'auraBlue':(hub?'auraGold':'auraGreen');
-   out+=`<g class="net-node ${isParent?'placeholder':''} ${hub?'hub':''}" data-node="${esc(n.key)}" tabindex="0" role="button" aria-label="${esc(detail)}" transform="translate(${n.x},${n.y})"><title>${esc(detail)} — Anklicken zum Öffnen</title>`;
-   out+=`<circle class="planet-aura" r="${r*2.5}" fill="url(#${aura})"/>`;
-   if(hub)out+=`<circle class="corona" r="${r+15}" fill="none" stroke="#f2d995" stroke-width="1" opacity=".5" stroke-dasharray="1 7"/>`;
-   if(isParent)out+=`<ellipse class="planet-orbit" rx="${r+10}" ry="${r*.42}" transform="rotate(-24)" fill="none" stroke="#a8c5de" stroke-width="1.1" opacity=".48"/>`;
-   out+=`<ellipse cx="3" cy="${r*.9}" rx="${r*.88}" ry="${r*.24}" fill="#02070d" opacity=".42" filter="url(#bloom)"/>`;
-   out+=`<circle class="sphere" r="${r}" style="fill:url(#${sphere})" filter="url(#softShadow)"/>`;
-   out+=`<g clip-path="url(#sphereClip)"><ellipse cx="-${r*.32}" cy="-${r*.43}" rx="${r*.49}" ry="${r*.26}" fill="#ffffff" opacity=".23" filter="url(#bloom)"/><path d="M ${-r*.8} ${-r*.1} Q ${-r*.25} ${-r*.55} ${r*.48} ${-r*.18}" fill="none" stroke="#ffffff" stroke-width="${r*.11}" opacity=".11"/><path d="M ${-r*.8} ${r*.15} Q 0 ${r*.38} ${r*.8} ${-r*.08}" fill="none" stroke="#dff4e0" stroke-width="${r*.045}" opacity=".13"/></g>`;
-   out+=`<ellipse cx="-${r*.32}" cy="-${r*.42}" rx="${r*.19}" ry="${r*.1}" fill="#fff" opacity=".48" filter="url(#bloom)"/>`;
-   if(hub)out+=`<path class="star-rays" d="M 0 ${-r-17} L 2 ${-5} L ${r+17} 0 L 5 2 L 0 ${r+17} L -2 5 L ${-r-17} 0 L -5 -2 Z" fill="#ffe6a3" opacity=".18" filter="url(#glow)"/>`;
-   out+=`<circle class="inner-core" r="${hub?4.5:3}" fill="#f8fff1" opacity=".72"/>`;
-   out+=`<text y="${r+19}">${esc(label)}</text><text class="small" y="${r+33}">${isParent?'Elternlinie · nicht angelegt':(hub?'Schlüssel-Sorte':'Gespeicherte Sorte')}</text></g>`;
+   const isSelected=n.key===selected,isAnc=ancestors.has(n.key),isCross=descendants.has(n.key)&&!isSelected;
+   const d=degree.get(n.key)||0;
+   const radius=n.placeholder?3.1:Math.min(8.5,3.1+Math.sqrt(d)*1.05);
+   const classes='web-node '+(n.placeholder?'parent-node ':'archive-node ')+(isSelected?'selected-node ':isAnc?'ancestor-node ':isCross?'cross-node ':'');
+   const title=n.name+(n.strain?' · '+(n.strain.breeder||'Archiv-Sorte'):' · Elternlinie');
+   out+='<g class="'+classes+'" data-node="'+esc(n.key)+'" tabindex="0" role="button" aria-label="'+esc(title)+'" transform="translate('+n.x.toFixed(2)+' '+n.y.toFixed(2)+')"><title>'+esc(title)+'</title>';
+   if(isSelected)out+='<circle class="node-selection" r="'+(radius+8)+'"/>';
+   if(n.placeholder)out+='<circle class="node-dot parent-dot" r="'+radius+'"/>';
+   else out+='<circle class="node-dot archive-dot" r="'+radius+'"/>';
+   if(isSelected)out+='<text class="node-label" y="'+(radius+17)+'">'+esc(n.name)+'</text>';
+   out+='</g>';
  });
  out+='</g>';svg.innerHTML=out;updateNetView();
- const activateNode=el=>{
-   const n=byKey.get(el.dataset.node);if(!n)return;
-   if(n.strain)openEditor(n.strain);
-   else if(confirm(`Für „${n.name}“ einen eigenen Sorteneintrag anlegen?`))openEditor({name:n.name,type:'Unbekannt'});
- };
+
+ const activate=key=>{networkSelected=key;buildNetwork()};
  svg.querySelectorAll('[data-node]').forEach(el=>{
-   el.addEventListener('click',()=>activateNode(el));
-   el.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();activateNode(el)}});
+   el.addEventListener('click',()=>activate(el.dataset.node));
+   el.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();activate(el.dataset.node)}});
  });
- const missing=arr.filter(n=>n.placeholder).length;
- $('networkHint').textContent=`${strains.length} gespeicherte Sorten · ${arr.length-missing} sichtbare Sorten · ${missing} noch nicht angelegte Elternlinien · ${links.length} Verbindungen. ${active?'Fokusansicht: nur das Verwandtschaftsnetz der ausgewählten Sorte.':'Alle erfassten Verbindungen deiner Sammlung.'}`;
+ familyList.querySelectorAll('[data-family]').forEach(el=>el.addEventListener('click',()=>{networkSelected=el.dataset.family;buildNetwork()}));
 }
+
 $('networkBtn').onclick=()=>{const p=$('networkPanel');p.hidden=!p.hidden;if(!p.hidden){buildNetwork();p.scrollIntoView({behavior:'smooth',block:'start'})}};
-$('focusFilter').onchange=buildNetwork;
-$('resetNetwork').onclick=()=>{$('focusFilter').value='';resetNetView();buildNetwork()};
 $('zoomIn').onclick=()=>changeNetZoom(netZoom*1.2);
 $('zoomOut').onclick=()=>changeNetZoom(netZoom/1.2);
 $('zoomReadout').onclick=resetNetView;
-$('networkSvg').addEventListener('wheel',e=>{if($('networkPanel').hidden)return;e.preventDefault();changeNetZoom(netZoom*(e.deltaY<0?1.12:1/1.12))},{passive:false});
+$('resetNetwork').onclick=()=>{resetNetView();buildNetwork()};
+$('webSearch').addEventListener('input',e=>{
+ const q=e.target.value.trim().toLowerCase();
+ if(!q){networkSelected=null;buildNetwork();return}
+ const hit=strains.find(s=>String(s.name||'').toLowerCase().includes(q));
+ if(hit){networkSelected='s:'+(hit.id||String(hit.name).toLowerCase().replace(/[^a-z0-9]+/g,' ').trim());buildNetwork()}
+ else buildNetwork();
+});
+$('editSelected').onclick=()=>{
+ if(!networkSelected)return;
+ const key=networkSelected;
+ const list=[...strains];
+ const s=list.find(x=>'s:'+(x.id||String(x.name).toLowerCase().replace(/[^a-z0-9]+/g,' ').trim())===key);
+ if(s)openEditor(s);
+ else{
+   const name=key.slice(2);
+   const nodeName=Array.from(document.querySelectorAll('[data-node]')).find(el=>el.dataset.node===key)?.querySelector('title')?.textContent?.split(' · ')[0]||name;
+   openEditor({name:nodeName,type:'Unbekannt'});
+ }
+};
 const netCanvas=document.querySelector('.network-canvas');
-netCanvas.addEventListener('pointerdown',e=>{if(e.target.closest('[data-node]'))return;netDragging=true;netLastX=e.clientX;netLastY=e.clientY;netCanvas.setPointerCapture(e.pointerId)});
-netCanvas.addEventListener('pointermove',e=>{if(!netDragging)return;const dx=e.clientX-netLastX,dy=e.clientY-netLastY;netLastX=e.clientX;netLastY=e.clientY;netPanX+=dx*netWorldW/netCanvas.clientWidth;netPanY+=dy*netWorldH/netCanvas.clientHeight;updateNetView()});
-const stopNetDrag=()=>{netDragging=false};netCanvas.addEventListener('pointerup',stopNetDrag);netCanvas.addEventListener('pointercancel',stopNetDrag);
-
+netCanvas.addEventListener('wheel',e=>{
+ if($('networkPanel').hidden)return;
+ e.preventDefault();changeNetZoom(netZoom*(e.deltaY<0?1.12:1/1.12));
+},{passive:false});
+netCanvas.addEventListener('pointerdown',e=>{
+ netPointers.set(e.pointerId,{x:e.clientX,y:e.clientY});
+ netCanvas.setPointerCapture(e.pointerId);
+ if(netPointers.size===1){netDragging=true;netLastX=e.clientX;netLastY=e.clientY}
+ else if(netPointers.size===2){
+  const pts=[...netPointers.values()];
+  netPinchStart=Math.hypot(pts[0].x-pts[1].x,pts[0].y-pts[1].y);
+  netPinchZoom=netZoom;netDragging=false;
+ }
+});
+netCanvas.addEventListener('pointermove',e=>{
+ if(!netPointers.has(e.pointerId))return;
+ netPointers.set(e.pointerId,{x:e.clientX,y:e.clientY});
+ if(netPointers.size>=2){
+  const pts=[...netPointers.values()];
+  const distance=Math.hypot(pts[0].x-pts[1].x,pts[0].y-pts[1].y);
+  if(netPinchStart>0)changeNetZoom(netPinchZoom*distance/netPinchStart);
+  return;
+ }
+ if(!netDragging)return;
+ const dx=e.clientX-netLastX,dy=e.clientY-netLastY;
+ netLastX=e.clientX;netLastY=e.clientY;
+ netPanX+=dx*netWorldW/netCanvas.clientWidth;
+ netPanY+=dy*netWorldH/netCanvas.clientHeight;
+ updateNetView();
+});
+const stopNetDrag=e=>{netPointers.delete(e.pointerId);if(netPointers.size<2)netPinchStart=0;netDragging=netPointers.size===1;if(netDragging){const p=[...netPointers.values()][0];netLastX=p.x;netLastY=p.y}};
+netCanvas.addEventListener('pointerup',stopNetDrag);
+netCanvas.addEventListener('pointercancel',stopNetDrag);
 loadSavedData().then(()=>render());
 </script>
 </body>
