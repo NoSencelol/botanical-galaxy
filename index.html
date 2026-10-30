@@ -783,7 +783,8 @@ netCanvas.addEventListener('wheel',e=>{
  e.preventDefault();changeNetZoom(netZoom*(e.deltaY<0?1.12:1/1.12));
 },{passive:false});
 netCanvas.addEventListener('pointerdown',e=>{
- netPointers.set(e.pointerId,{x:e.clientX,y:e.clientY});
+ const hitNode=e.target.closest?.('[data-node]');
+ netPointers.set(e.pointerId,{x:e.clientX,y:e.clientY,startX:e.clientX,startY:e.clientY,nodeKey:hitNode?.dataset.node||null,moved:false});
  netCanvas.setPointerCapture(e.pointerId);
  if(netPointers.size===1){netDragging=true;netLastX=e.clientX;netLastY=e.clientY}
  else if(netPointers.size===2){
@@ -794,7 +795,9 @@ netCanvas.addEventListener('pointerdown',e=>{
 });
 netCanvas.addEventListener('pointermove',e=>{
  if(!netPointers.has(e.pointerId))return;
- netPointers.set(e.pointerId,{x:e.clientX,y:e.clientY});
+ const pointer=netPointers.get(e.pointerId);
+ const moved=Math.hypot(e.clientX-pointer.startX,e.clientY-pointer.startY)>6;
+ netPointers.set(e.pointerId,{...pointer,x:e.clientX,y:e.clientY,moved:pointer.moved||moved});
  if(netPointers.size>=2){
   const pts=[...netPointers.values()];
   const distance=Math.hypot(pts[0].x-pts[1].x,pts[0].y-pts[1].y);
@@ -808,7 +811,15 @@ netCanvas.addEventListener('pointermove',e=>{
  netPanY+=dy*netWorldH/netCanvas.clientHeight;
  updateNetView();
 });
-const stopNetDrag=e=>{netPointers.delete(e.pointerId);if(netPointers.size<2)netPinchStart=0;netDragging=netPointers.size===1;if(netDragging){const p=[...netPointers.values()][0];netLastX=p.x;netLastY=p.y}};
+const stopNetDrag=e=>{
+ const pointer=netPointers.get(e.pointerId);
+ const wasNodeClick=netPointers.size===1&&pointer?.nodeKey&&!pointer.moved;
+ netPointers.delete(e.pointerId);
+ if(netPointers.size<2)netPinchStart=0;
+ netDragging=netPointers.size===1;
+ if(netDragging){const p=[...netPointers.values()][0];netLastX=p.x;netLastY=p.y}
+ if(wasNodeClick){networkSelected=pointer.nodeKey;buildNetwork()}
+};
 netCanvas.addEventListener('pointerup',stopNetDrag);
 netCanvas.addEventListener('pointercancel',stopNetDrag);
 loadSavedData().then(()=>render());
