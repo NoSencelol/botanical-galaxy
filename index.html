@@ -322,6 +322,46 @@ dialog{background:linear-gradient(145deg,#18271d,#0f1913);border-color:#607c61;b
  .web-map-help{right:9px;bottom:10px;font-size:9px;max-width:124px}
 }
 
+
+/* Cosmic cannabis universe – global site backdrop */
+body{
+ background-color:#03070d;
+ background-image:
+  linear-gradient(180deg,rgba(3,8,13,.58),rgba(3,8,13,.72)),
+  url("./cosmic-cannabis-bg.svg");
+ background-position:center center,center center;
+ background-size:cover,cover;
+ background-attachment:fixed,fixed;
+}
+body:before{opacity:.22}
+header{
+ background:linear-gradient(180deg,rgba(5,13,17,.88),rgba(5,13,17,.58));
+ border-bottom-color:#8bbd9a35;
+ backdrop-filter:blur(16px) saturate(125%);
+}
+main{position:relative}
+.hero,.toolbar{position:relative}
+.stat,.card,.network-panel,.web-sidebar,.web-map-column,dialog{
+ background-color:rgba(7,15,18,.84);
+ backdrop-filter:blur(13px) saturate(125%);
+ border-color:rgba(111,157,132,.32);
+ box-shadow:0 18px 48px rgba(0,0,0,.34),inset 0 1px 0 rgba(255,255,255,.035);
+}
+.card{background:linear-gradient(145deg,rgba(16,35,29,.91),rgba(5,14,18,.91))}
+.card .photo{background:linear-gradient(135deg,#183b32,#08121a)}
+.toolbar .search,.toolbar .filter,.field input,.field textarea,.field select{
+ background:rgba(5,13,17,.88);border-color:rgba(112,157,137,.38)
+}
+.network-canvas.web-network-canvas{
+ background:
+  radial-gradient(ellipse at 48% 46%,rgba(26,81,66,.28),transparent 62%),
+  linear-gradient(145deg,rgba(3,10,15,.84),rgba(2,7,12,.91));
+}
+footer{color:#9bb2a5}
+@media(max-width:700px){
+ body{background-position:center center,58% center;background-attachment:scroll,scroll}
+}
+
 </style>
 </head>
 <body>
