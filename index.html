@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#101713">
-<title>Botanical Archive — Meine Sorten</title>
+<title>Botanical Galaxy — Dein Sortensystem</title>
 <style>
 :root{--bg:#0d1410;--panel:#151f19;--panel2:#1b2920;--line:#2b3b30;--text:#edf3ed;--muted:#9aaa9e;--green:#a8d5a0;--green2:#6f9e76;--gold:#d7c69a;--danger:#e69a91}
 *{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at 80% 0%,#1b3022 0,transparent 38%),var(--bg);color:var(--text);font:15px/1.5 Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,sans-serif}
@@ -38,11 +38,179 @@ footer{color:#718176;text-align:center;font-size:11px;padding:25px}
 dialog{border:1px solid #405646;background:#121b15;color:var(--text);border-radius:20px;padding:0;width:min(650px,calc(100% - 24px));max-height:90vh;overflow:auto;box-shadow:0 25px 90px #000b}dialog::backdrop{background:#000a;backdrop-filter:blur(4px)}.modalhead{padding:20px 22px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center}.modalhead h3{margin:0;font-size:19px}.form{padding:20px 22px;display:grid;grid-template-columns:1fr 1fr;gap:13px}.field{display:flex;flex-direction:column;gap:6px}.field.full{grid-column:1/-1}.field label{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em}.field input,.field textarea,.field select{background:#0c140f;border:1px solid var(--line);border-radius:10px;color:var(--text);padding:11px;font:inherit;width:100%}.field textarea{min-height:85px;resize:vertical}.hint{font-size:11px;color:#849589}.modalfoot{padding:15px 22px 20px;display:flex;justify-content:flex-end;gap:9px}
 @media(max-width:850px){.grid{grid-template-columns:repeat(2,minmax(0,1fr))}.hero{grid-template-columns:1fr}.stats{max-width:380px}}
 @media(max-width:570px){header{padding:22px 16px;align-items:flex-start;flex-direction:column}.actions{width:100%}.actions .btn{flex:1}main{padding:0 16px 40px}.grid{grid-template-columns:1fr}.photo{height:235px}.form{grid-template-columns:1fr}.field.full{grid-column:auto}.hero{padding-top:25px}}
+
+/* Botanical Galaxy – realistischer, räumlicher Material-Look */
+:root{
+ --bg:#080f0b;--panel:#111b14;--panel2:#1a2a1e;--line:#304437;
+ --text:#edf4eb;--muted:#a4b2a4;--green:#c1e0aa;--green2:#7fa47b;
+ --gold:#e3cf9d;--danger:#e9a39a;
+}
+body{
+ background:
+  radial-gradient(ellipse at 12% 8%,#2e563b70 0,transparent 34%),
+  radial-gradient(ellipse at 88% 20%,#253f3770 0,transparent 32%),
+  radial-gradient(ellipse at 50% 92%,#1a382b55 0,transparent 38%),
+  linear-gradient(145deg,#080f0b 0%,#0c1710 48%,#070d09 100%);
+ background-attachment:fixed;
+}
+body:before{
+ content:"";position:fixed;inset:0;pointer-events:none;z-index:0;opacity:.14;
+ background-image:radial-gradient(#d4e6d0 0.55px,transparent .8px),radial-gradient(#9bb99d .45px,transparent .8px);
+ background-size:37px 37px,61px 61px;background-position:0 0,17px 23px;
+ mask-image:linear-gradient(to bottom,#000,transparent 88%);
+}
+body>*{position:relative;z-index:1}
+header{
+ max-width:1280px;padding:22px 26px 18px;position:relative;z-index:4;
+ border-bottom:1px solid #68836b28;
+ background:linear-gradient(180deg,#0e1a12d9,#0e1a1280);
+ backdrop-filter:blur(18px) saturate(135%);
+}
+.brand{gap:15px}
+.mark{
+ width:48px;height:48px;border-radius:16px;border:1px solid #9abf8d66;
+ color:#e4f2d8;font-size:25px;
+ background:radial-gradient(circle at 32% 25%,#a9d19b66,transparent 58%),linear-gradient(145deg,#294532,#101d14);
+ box-shadow:inset 0 1px 0 #ffffff26,0 7px 24px #0008,0 0 26px #7ba77b24;
+ text-shadow:0 0 15px #d7f0c8aa;
+}
+.brand h1{font-size:21px;letter-spacing:.13em;font-weight:750}
+.eyebrow{color:#c4dfae;letter-spacing:.24em}
+.btn{
+ border-color:#49634d;background:linear-gradient(180deg,#263b2b,#17251b);
+ box-shadow:inset 0 1px 0 #ffffff18,0 5px 14px #0003;
+ transition:transform .2s ease,border-color .2s ease,box-shadow .2s ease,background .2s ease;
+}
+.btn:hover{transform:translateY(-1px);border-color:#a6ce9b;box-shadow:inset 0 1px 0 #ffffff25,0 8px 22px #0005,0 0 18px #8ab98226}
+.btn.primary{
+ color:#122017;background:linear-gradient(135deg,#d2e8bd,#9fc58f 65%,#83ad7d);
+ border-color:#cbe4b7;box-shadow:inset 0 1px 0 #ffffffaa,0 6px 20px #789e6935;
+}
+main{max-width:1280px}
+.hero{
+ position:relative;isolation:isolate;overflow:hidden;margin:24px 0 28px;padding:42px 38px 36px;
+ border:1px solid #68836b58;border-radius:28px;
+ background:
+  radial-gradient(ellipse at 82% 20%,#6b96602b 0,transparent 35%),
+  radial-gradient(ellipse at 8% 100%,#3a67442c 0,transparent 42%),
+  linear-gradient(125deg,#17281cdd,#0e1a13f2 62%,#111e16eF);
+ box-shadow:inset 0 1px 0 #ffffff18,inset 0 -35px 65px #03090560,0 22px 65px #0005;
+}
+.hero:before{
+ content:"";position:absolute;z-index:-1;right:-70px;top:-180px;width:490px;height:490px;border-radius:50%;
+ border:1px solid #a9c79a20;box-shadow:0 0 0 26px #a9c79a08,0 0 0 58px #a9c79a06,0 0 85px #91b47c18;
+ background:radial-gradient(circle at 35% 35%,#b9d9a31c,transparent 60%);
+}
+.hero:after{
+ content:"";position:absolute;z-index:-1;inset:0;pointer-events:none;opacity:.18;
+ background-image:repeating-linear-gradient(118deg,transparent 0 3px,#d6e7d20b 4px,transparent 5px 11px);
+ mask-image:linear-gradient(110deg,#000,transparent 76%);
+}
+.hero h2{
+ font-family:Georgia,"Times New Roman",serif;font-weight:500;letter-spacing:-.055em;
+ text-shadow:0 4px 24px #0008;font-size:clamp(36px,5vw,62px);
+}
+.hero p{color:#c0cec0;max-width:650px}
+.stats{gap:12px;position:relative;z-index:1}
+.stat{
+ border:1px solid #78927650;border-radius:18px;padding:17px 18px;
+ background:linear-gradient(150deg,#263a2bbd,#142219e8);
+ box-shadow:inset 0 1px 0 #ffffff17,0 12px 28px #0003;
+ backdrop-filter:blur(12px);
+}
+.stat strong{color:#d1eab9;text-shadow:0 0 22px #a4cc8d55;font-family:Georgia,serif;font-size:31px}
+.toolbar{margin:22px 0 20px}
+.search,.filter{
+ background:linear-gradient(180deg,#16251bdc,#101a14ed);border-color:#456049;
+ box-shadow:inset 0 1px 0 #ffffff0e,0 7px 20px #0002;
+ backdrop-filter:blur(10px);
+}
+.search:focus,.filter:focus{outline:1px solid #acd09c;border-color:#acd09c;box-shadow:0 0 0 3px #a6ca9630,0 8px 24px #0004}
+.grid{gap:20px}
+.card{
+ position:relative;border:1px solid #536e565e;border-radius:20px;
+ background:linear-gradient(150deg,#1b2b20,#101a14 65%,#0d1711);
+ box-shadow:inset 0 1px 0 #ffffff15,0 14px 34px #0005;
+}
+.card:before{content:"";position:absolute;inset:0 0 auto;height:1px;background:linear-gradient(90deg,transparent,#c9e4bd55,transparent);pointer-events:none;z-index:2}
+.card:hover{transform:translateY(-4px);border-color:#92b18b;box-shadow:inset 0 1px 0 #ffffff20,0 20px 42px #0007,0 0 26px #8eb78320}
+.photo{
+ height:230px;background:
+  radial-gradient(ellipse at 25% 20%,#7f9f7450,transparent 35%),
+  radial-gradient(ellipse at 75% 85%,#284f376e,transparent 40%),
+  linear-gradient(135deg,#24382a,#0c1710 72%);
+}
+.photo:after{
+ content:"";position:absolute;inset:0;pointer-events:none;
+ background:linear-gradient(180deg,#07110b14 35%,#08130bd9 100%),linear-gradient(115deg,#bcd6ad0d,transparent 48%);
+ box-shadow:inset 0 0 45px #02070465;
+}
+.photo img{transition:transform .65s cubic-bezier(.2,.75,.25,1),filter .5s ease;filter:saturate(.9) contrast(1.04)}
+.card:hover .photo img{transform:scale(1.045);filter:saturate(1.06) contrast(1.06)}
+.photo .placeholder{
+ background:radial-gradient(ellipse at 45% 38%,#9dbb8c33,transparent 28%),radial-gradient(ellipse at 54% 74%,#507b4e3b,transparent 43%);
+ color:#b6d2a5;text-shadow:0 0 22px #a9d09390;font-size:48px;
+}
+.photo .tag{
+ z-index:1;background:#0b170fc9;border-color:#8da98488;color:#d9edcf;
+ box-shadow:0 5px 16px #0005;backdrop-filter:blur(10px);
+}
+.cardbody{padding:19px}
+.card h3{font-family:Georgia,"Times New Roman",serif;font-size:22px;font-weight:500;letter-spacing:-.015em}
+.chip{background:linear-gradient(180deg,#2a4330,#1c3022);border-color:#47674a;color:#d3e3cf}
+.metric{background:linear-gradient(145deg,#17261b,#0c160f);border:1px solid #344a38}
+.metric b{color:#e4eee0}
+.notes{color:#c2cec1}
+.cardfoot{border-color:#405541}
+.textbtn{transition:color .18s ease,text-shadow .18s ease}
+.textbtn:hover{color:#d7edc8;text-shadow:0 0 13px #b5d89b66}
+.empty{background:linear-gradient(145deg,#132117aa,#0d1710bb);border-color:#66836a;color:#b4c4b3}
+.network-panel{
+ position:relative;isolation:isolate;border-color:#465a6c;border-radius:24px;padding:22px;
+ background:radial-gradient(ellipse at 20% 0%,#526f8750,transparent 38%),linear-gradient(145deg,#0d1720,#0b1118 58%,#101720);
+ box-shadow:inset 0 1px 0 #ffffff14,0 22px 60px #0006;
+}
+.network-panel:before{
+ content:"";position:absolute;z-index:-1;inset:0;border-radius:inherit;pointer-events:none;opacity:.4;
+ background:radial-gradient(ellipse at 85% 32%,#8b6c9250,transparent 30%),radial-gradient(ellipse at 52% 100%,#436d7a35,transparent 40%);
+ filter:blur(18px);
+}
+.network-panel .eyebrow{color:#c4d8e8}
+.network-canvas{
+ border-color:#536d87;border-radius:18px;
+ background:
+  radial-gradient(ellipse at 19% 23%,#6e88b35c 0,transparent 32%),
+  radial-gradient(ellipse at 78% 72%,#79528a45 0,transparent 36%),
+  radial-gradient(ellipse at 52% 48%,#31445f 0,#142236 43%,#070d15 100%);
+ box-shadow:inset 0 0 100px #02060bbf,inset 0 0 25px #7792aa22,0 20px 45px #0007;
+}
+.net-edge{stroke:#c5ddf7;opacity:.75;filter:drop-shadow(0 0 4px #9fc6f5a8)}
+.net-edge.fine{stroke:#e2eaff;opacity:.42;filter:drop-shadow(0 0 5px #b7d1ff)}
+.net-edge.root-shadow{stroke:#708dbd;opacity:.23;filter:blur(2px)}
+.net-node circle:not(.halo){filter:drop-shadow(0 0 5px #c3ddff) drop-shadow(0 0 12px #8ab6ff90)}
+.net-node.hub circle:not(.halo){filter:drop-shadow(0 0 9px #fff0bf) drop-shadow(0 0 22px #e8d08eaa)}
+.net-node text{font-family:Georgia,"Times New Roman",serif;font-size:14px}
+.net-node .small{font-family:Inter,system-ui,sans-serif;letter-spacing:.04em}
+.network-foot{color:#aebdca}
+.parent-fields{background:linear-gradient(145deg,#1b2d20,#132018);border-color:#47644a;box-shadow:inset 0 1px 0 #ffffff12}
+dialog{background:linear-gradient(145deg,#18271d,#0f1913);border-color:#607c61;box-shadow:0 30px 100px #000d,inset 0 1px 0 #ffffff17}
+.field input:focus,.field textarea:focus,.field select:focus{outline:1px solid #a9ca98;border-color:#a9ca98;box-shadow:0 0 0 3px #a9ca9826}
+@media(max-width:570px){
+ header{padding:18px 16px 16px}
+ .hero{padding:30px 22px 25px;border-radius:22px}
+ .hero:before{right:-220px;top:-140px}
+ .hero h2{font-size:clamp(34px,10vw,48px)}
+ .network-panel{border-radius:20px}
+}
+@media(prefers-reduced-motion:reduce){
+ *,*:before,*:after{animation-duration:.01ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important;transition-duration:.01ms!important}
+}
+
 </style>
 </head>
 <body>
 <header>
-  <div class="brand"><div class="mark">✳</div><div><div class="eyebrow">Personal collection</div><h1>BOTANICAL ARCHIVE</h1></div></div>
+  <div class="brand"><div class="mark">✳</div><div><div class="eyebrow">Private botanical atlas</div><h1>BOTANICAL GALAXY</h1></div></div>
   <div class="actions">
     <button class="btn" id="exportBtn">↓ Daten sichern</button>
     <button class="btn" id="importBtn">↑ Daten laden</button>
