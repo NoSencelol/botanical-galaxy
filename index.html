@@ -561,6 +561,7 @@ function buildNetwork(){
    out+=`<circle class="inner-core" r="${hub?4.5:3}" fill="#f8fff1" opacity=".72"/>`;
    out+=`<text y="${r+19}">${esc(label)}</text><text class="small" y="${r+33}">${isParent?'Elternlinie · nicht angelegt':(hub?'Schlüssel-Sorte':'Gespeicherte Sorte')}</text></g>`;
  });
+ out+='</g>';svg.innerHTML=out;updateNetView();
  const activateNode=el=>{
    const n=byKey.get(el.dataset.node);if(!n)return;
    if(n.strain)openEditor(n.strain);
