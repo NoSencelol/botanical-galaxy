@@ -253,7 +253,7 @@ dialog{background:linear-gradient(145deg,#18271d,#0f1913);border-color:#607c61;b
 .web-edge{stroke:#98721e;stroke-width:1.05;opacity:.42;fill:none;vector-effect:non-scaling-stroke}
 .web-edge.ancestor-edge{stroke:#f1f1ec;stroke-width:1.3;opacity:.83;filter:drop-shadow(0 0 3px #fff8)}
 .web-edge.cross-edge{stroke:#f4c43b;stroke-width:1.25;opacity:.78;filter:drop-shadow(0 0 3px #f4c43b55)}
-.web-node{cursor:pointer;outline:none}
+.web-node{cursor:pointer;outline:none;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}.web-node *,.node-label,.family-chip,.family-chip span,.web-selected-panel h3,.card h3{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
 .web-node .node-dot{vector-effect:non-scaling-stroke}
 .web-node.hub-node .archive-dot{fill:#ffe079;stroke:#fff0b7;stroke-width:1.1;filter:drop-shadow(0 0 5px #f5d35d) drop-shadow(0 0 11px #d6a93488)}
 .archive-dot{fill:#f5c637;stroke:#f5c637;stroke-width:.6;filter:drop-shadow(0 0 2px #f5c63755)}
@@ -298,7 +298,7 @@ dialog{background:linear-gradient(145deg,#18271d,#0f1913);border-color:#607c61;b
 .web-selected-panel h3{font-size:18px;margin:9px 0 7px;color:#f4cf64;line-height:1.2}
 .web-selected-meta{font-size:11px;line-height:1.5;color:#aaa;overflow-wrap:anywhere}
 .web-edit-button{margin-top:13px;border:1px solid #785d1c;border-radius:20px;background:#17130a;color:#f3c744;padding:8px 13px;font-size:11px;font-weight:700;cursor:pointer}
-.web-edit-button:disabled{opacity:.35;cursor:default}
+.web-edit-button:disabled{opacity:.35;cursor:default}.web-open-archive-button{display:block;border-color:#b28a22;background:#241b08;color:#ffe079}.card.card-target-highlight{border-color:#e0b62a!important;box-shadow:0 0 0 2px #e0b62a66,0 0 32px #e0b62a55;transform:translateY(-2px)}
 .web-sidebar-foot{margin-top:auto;padding-top:22px;font-size:10px;line-height:1.45;color:#777}
 @media(max-width:980px){
  .network-explorer{grid-template-columns:minmax(0,1fr) 285px}
@@ -384,6 +384,7 @@ dialog{background:linear-gradient(145deg,#18271d,#0f1913);border-color:#607c61;b
         <div class="web-sidebar-kicker">SELECTED STRAIN</div>
         <h3 id="selectedName">Noch keine Sorte ausgewählt</h3>
         <div id="selectedMeta" class="web-selected-meta">Wähle einen gelben Punkt im Netzwerk aus.</div>
+        <button class="web-edit-button web-open-archive-button" id="openSelectedArchive" type="button" disabled>Zur Sorte im Archiv</button>
         <button class="web-edit-button" id="editSelected" type="button" disabled>Eintrag bearbeiten</button>
       </div>
       <div id="networkHint" class="web-sidebar-foot">0 gespeicherte Sorten · Füge Sorten und ihre Elternlinien hinzu, um dein Netzwerk aufzubauen.</div>
@@ -475,7 +476,7 @@ function render(){
  let list=strains.filter(s=>(!typ||s.type===typ)&&[s.name,s.breeder,s.genetics,s.parent1,s.parent2,s.aroma,s.notes].join(' ').toLowerCase().includes(q));
  if(sort==='az')list.sort((a,b)=>a.name.localeCompare(b.name,'de'));else list.sort((a,b)=>b.created-a.created);
  $('totalCount').textContent=strains.length;$('photoCount').textContent=strains.filter(s=>s.image).length;
- $('grid').innerHTML=list.length?list.map(s=>`<article class="card">
+ $('grid').innerHTML=list.length?list.map(s=>`<article class="card" data-strain-id="${esc(s.id||'')}" data-strain-name="${esc(s.name)}">
  <div class="photo">${s.image?`<img src="${s.image}" alt="${esc(s.name)}">`:`<div class="placeholder">✳</div>`}<span class="tag">${esc(s.type||'Unbekannt')}</span></div>
  <div class="cardbody"><div class="cardhead"><div><h3>${esc(s.name)}</h3><div class="sub">${esc(s.breeder||'Breeder nicht angegeben')}</div></div></div>
  <div class="chips">${s.genetics?`<span class="chip">${esc(s.genetics)}</span>`:''}${s.aroma?`<span class="chip">${esc(s.aroma)}</span>`:''}</div>
@@ -483,6 +484,20 @@ function render(){
  <div class="metrics"><div class="metric"><span>THC</span><b>${esc(s.thc||'—')}</b></div><div class="metric"><span>CBD</span><b>${esc(s.cbd||'—')}</b></div><div class="metric"><span>Bewertung</span><b>${esc(s.rating||'—')}</b></div><div class="metric"><span>Kategorie</span><b>${esc(s.type||'—')}</b></div></div>
  ${s.notes?`<p class="notes">${esc(s.notes)}</p>`:''}
  <div class="cardfoot"><span class="sub">Persönlicher Eintrag</span><div><button class="textbtn" data-edit="${s.id}">Bearbeiten</button>　<button class="textbtn" data-delete="${s.id}" style="color:var(--danger)">Löschen</button></div></div></div></article>`).join(''):`<div class="empty"><strong>${q||typ?'Keine passenden Sorten gefunden':'Dein Archiv wartet auf den ersten Eintrag.'}</strong>${q||typ?'Passe deine Suche oder Filter an.':'Füge eine Sorte hinzu und ergänze Bilder, Werte und persönliche Notizen.'}</div>`;
+}
+function openArchiveCard(strainId,strainName){
+ $('search').value='';
+ $('typeFilter').value='';
+ render();
+ const cards=Array.from($('grid').querySelectorAll('.card[data-strain-name]'));
+ const target=cards.find(card=>strainId&&card.dataset.strainId===String(strainId))
+  ||cards.find(card=>card.dataset.strainName===String(strainName));
+ if(!target)return;
+ target.scrollIntoView({behavior:'smooth',block:'center'});
+ target.classList.remove('card-target-highlight');
+ void target.offsetWidth;
+ target.classList.add('card-target-highlight');
+ setTimeout(()=>target.classList.remove('card-target-highlight'),2400);
 }
 function openEditor(s=null){
  editing=s?.id??null;pendingImage=s?.image||null;$('modalTitle').textContent=s?'Sorte bearbeiten':'Neue Sorte';
@@ -686,6 +701,11 @@ function buildNetwork(){
    $('editSelected').disabled=true;
    $('editSelected').textContent='Eintrag bearbeiten';
  }
+ const archiveJump=$('openSelectedArchive');
+ archiveJump.disabled=!selectedNode?.strain;
+ archiveJump.dataset.strainId=selectedNode?.strain?.id||'';
+ archiveJump.dataset.strainName=selectedNode?.strain?.name||'';
+ archiveJump.textContent=selectedNode?.strain?'Zur Sorte im Archiv':selectedNode?'Elternlinie nicht gespeichert':'Sorte im Archiv öffnen';
  const q=search?search.value.trim().toLowerCase():'';
  const unmatched=q&&!arr.some(n=>n.name.toLowerCase().includes(q));
  $('networkHint').textContent=unmatched?'Keine Sorte mit diesem Namen gefunden.':strains.length+' gespeicherte Sorten · '+arr.filter(n=>n.strain).length+' gelbe Sorten · '+arr.filter(n=>n.placeholder).length+' offene Elternlinien · '+edges.length+' Verbindungen.';
@@ -741,6 +761,10 @@ $('webSearch').addEventListener('input',e=>{
  if(hit){networkSelected='s:'+(hit.id||String(hit.name).toLowerCase().replace(/[^a-z0-9]+/g,' ').trim());buildNetwork()}
  else buildNetwork();
 });
+$('openSelectedArchive').onclick=()=>{
+ const btn=$('openSelectedArchive');
+ if(!btn.disabled)openArchiveCard(btn.dataset.strainId,btn.dataset.strainName);
+};
 $('editSelected').onclick=()=>{
  if(!networkSelected)return;
  const key=networkSelected;
