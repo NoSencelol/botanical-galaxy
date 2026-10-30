@@ -534,6 +534,8 @@ function buildNetwork(){
  const svg=$('networkSvg'), familyList=$('familyList'), search=$('webSearch');
  const nodes=new Map(), edges=[], aliases=new Map();
  const norm=value=>String(value||'').normalize('NFKD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/\b(the|strain)\b/g,'').replace(/[^a-z0-9]+/g,' ').trim();
+  // Treat spacing and punctuation variants of the same parent name as one network identity.
+  const identity=value=>norm(value).replace(/\s+/g,'');
  const split=value=>{
    const raw=String(value||'').trim();if(!raw)return [];
    const expanded=raw.replace(/\s+(?:crossed\s+with|cross\s+with|and|by)\s+/ig,' × ');
@@ -544,7 +546,7 @@ function buildNetwork(){
  strains.forEach((s,i)=>{
    const key='s:'+(s.id||norm(s.name)||i);
    nodes.set(key,{key,name:s.name,strain:s,placeholder:false,index:i});
-   [s.name].forEach(label=>{const n=norm(label);if(n&&!aliases.has(n))aliases.set(n,key)});
+   [s.name].forEach(label=>{const n=identity(label);if(n&&!aliases.has(n))aliases.set(n,key)});
  });
  strains.forEach((s,i)=>{
    const child='s:'+(s.id||norm(s.name)||i);
@@ -556,12 +558,12 @@ function buildNetwork(){
    // Standard lineage fallback for the well-known Purple Punch cultivar, only when parent data is missing.
    if(norm(s.name)==='purple punch'){
      ['Granddaddy Purple','Larry OG'].forEach(parent=>{
-       if(!parentNames.some(existing=>norm(existing)===norm(parent)))parentNames.push(parent);
+       if(!parentNames.some(existing=>identity(existing)===identity(parent)))parentNames.push(parent);
      });
    }
    const seen=new Set();
    parentNames.forEach(parent=>{
-     const n=norm(parent);if(!n||seen.has(n))return;seen.add(n);
+     const n=identity(parent);if(!n||seen.has(n))return;seen.add(n);
      const matched=aliases.get(n);
      if(matched===child)return;
      const key=matched||('p:'+n);
