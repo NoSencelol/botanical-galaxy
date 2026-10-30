@@ -258,6 +258,7 @@ dialog{background:linear-gradient(145deg,#18271d,#0f1913);border-color:#607c61;b
 .archive-dot{fill:#f5c637;stroke:#f5c637;stroke-width:.6;filter:drop-shadow(0 0 2px #f5c63755)}
 .parent-dot{fill:#050505;stroke:#aaa9a3;stroke-width:1.15}
 .web-node.ancestor-node .archive-dot{fill:#fff;stroke:#fff;filter:drop-shadow(0 0 5px #fff)}
+.web-node.ancestor-node .parent-dot{stroke:#fff;filter:drop-shadow(0 0 4px #fff8)}
 .web-node.cross-node .archive-dot{fill:#ffd04b;stroke:#ffd04b;filter:drop-shadow(0 0 5px #ffd04b)}
 .web-node.selected-node .archive-dot{fill:#ffe073;stroke:#fff0b3;stroke-width:1.4;filter:drop-shadow(0 0 8px #ffd64c)}
 .web-node.selected-node .parent-dot{stroke:#ffd04b;stroke-width:1.7}
@@ -634,12 +635,20 @@ function buildNetwork(){
    while(down.length){const k=down.pop();(childrenByParent.get(k)||[]).forEach(child=>{if(!descendants.has(child)){descendants.add(child);down.push(child)}})}
  }
  // The sidebar family chips represent connected groups, ranked by archive entries and crossings.
- const candidates=arr.filter(n=>n.strain).sort((a,b)=>(familyCounts[componentOf.get(b.key)]||0)-(familyCounts[componentOf.get(a.key)]||0)||(degree.get(b.key)||0)-(degree.get(a.key)||0));
- const familySeeds=[],usedFamilies=new Set();
- candidates.forEach(n=>{const ci=componentOf.get(n.key);if(usedFamilies.has(ci))return;usedFamilies.add(ci);familySeeds.push(n)});
- familyList.innerHTML=familySeeds.slice(0,8).map(n=>{
-   const count=familyCounts[componentOf.get(n.key)]||1;
-   return '<button type="button" class="family-chip '+(selected===n.key?'active':'')+'" data-family="'+esc(n.key)+'"><span>'+esc(n.name)+'</span><small>'+Math.max(1,count-1)+'</small></button>';
+ const descendantCounts=new Map();
+ arr.filter(n=>n.strain).forEach(n=>{
+   const found=new Set(),stack=[...(childrenByParent.get(n.key)||[])];
+   while(stack.length){
+     const k=stack.pop();if(found.has(k))continue;found.add(k);
+     (childrenByParent.get(k)||[]).forEach(next=>stack.push(next));
+   }
+   descendantCounts.set(n.key,[...found].filter(k=>byKey.get(k)?.strain).length);
+ });
+ // Show the most connected archive strains as family starting points, including several hubs from one large family.
+ const familySeeds=arr.filter(n=>n.strain).sort((a,b)=>(descendantCounts.get(b.key)||0)-(descendantCounts.get(a.key)||0)||(degree.get(b.key)||0)-(degree.get(a.key)||0)).slice(0,8);
+ familyList.innerHTML=familySeeds.map(n=>{
+   const count=descendantCounts.get(n.key)||0;
+   return '<button type="button" class="family-chip '+(selected===n.key?'active':'')+'" data-family="'+esc(n.key)+'"><span>'+esc(n.name)+'</span><small>'+count+'</small></button>';
  }).join('')||'<span class="web-muted">Noch keine Familien vorhanden.</span>';
 
  const selectedNode=selected?byKey.get(selected):null;
