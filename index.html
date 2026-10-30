@@ -264,6 +264,7 @@ dialog{background:linear-gradient(145deg,#18271d,#0f1913);border-color:#607c61;b
 .web-node.selected-node .parent-dot{stroke:#ffd04b;stroke-width:1.7}
 .node-selection{fill:none;stroke:#f6d35f;stroke-width:1.2;opacity:.9;filter:drop-shadow(0 0 5px #f4c744)}
 .node-label{fill:#e4d6a8;font:600 10px Inter,system-ui,sans-serif;text-anchor:middle;paint-order:stroke;stroke:#080808;stroke-width:3px;stroke-linejoin:round;pointer-events:none;opacity:.92}.node-label.active{fill:#fff1c4;font-size:12px;opacity:1;filter:drop-shadow(0 0 4px #f5d35d66)}
+.node-label.parent-label{fill:#aaa9a3;font-size:9px;font-weight:500;opacity:.86}.node-label.parent-label.active{fill:#fff4c9;font-size:12px;font-weight:700;opacity:1}
 .web-node:focus .node-selection{stroke:#fff;stroke-width:2}
 .web-map-legend{position:absolute;z-index:3;left:16px;bottom:18px;display:grid;gap:6px;padding:10px 12px;background:#050505c9;border-radius:10px;color:#d3d3d3;font-size:11px;backdrop-filter:blur(6px)}
 .web-map-legend>div{display:flex;align-items:center;gap:8px}
@@ -693,7 +694,7 @@ function buildNetwork(){
    if(isSelected)out+='<circle class="node-selection" r="'+(radius+8)+'"/>';
    if(n.placeholder)out+='<circle class="node-dot parent-dot" r="'+radius+'"/>';
    else out+='<circle class="node-dot archive-dot" r="'+radius+'"/>';
-   if(n.strain||isSelected){const label=n.name.length>24?n.name.slice(0,22)+'…':n.name;out+='<text class="node-label'+(isSelected?' active':'')+'" y="'+(radius+(isSelected?18:15))+'">'+esc(label)+'</text>';}
+   {const label=n.name.length>22?n.name.slice(0,20)+'…':n.name;const labelClass='node-label'+(n.placeholder?' parent-label':'')+(isSelected?' active':'');out+='<text class="'+labelClass+'" y="'+(radius+(isSelected?18:15))+'">'+esc(label)+'</text>';}
    out+='</g>';
  });
  out+='</g>';svg.innerHTML=out;updateNetView();
