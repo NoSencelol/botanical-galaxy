@@ -534,7 +534,13 @@ function buildNetwork(){
  const svg=$('networkSvg'), familyList=$('familyList'), search=$('webSearch');
  const nodes=new Map(), edges=[], aliases=new Map();
  const norm=value=>String(value||'').normalize('NFKD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/\b(the|strain)\b/g,'').replace(/[^a-z0-9]+/g,' ').trim();
- const split=value=>String(value||'').split(/\s*(?:×|\*|\+|\bx\b|\bby\b)\s*/i).map(v=>v.trim()).filter(Boolean);
+ const split=value=>{
+   const raw=String(value||'').trim();if(!raw)return [];
+   const expanded=raw.replace(/\s+(?:crossed\s+with|cross\s+with|and|by)\s+/ig,' × ');
+   return expanded.split(/\s*(?:×|\*|\+|\/|,|;|\bx\b)\s*/i)
+     .map(v=>v.trim().replace(/^[()[\]{}]+|[()[\]{}]+$/g,'').trim())
+     .filter(Boolean);
+ };
  strains.forEach((s,i)=>{
    const key='s:'+(s.id||norm(s.name)||i);
    nodes.set(key,{key,name:s.name,strain:s,placeholder:false,index:i});
@@ -542,7 +548,11 @@ function buildNetwork(){
  });
  strains.forEach((s,i)=>{
    const child='s:'+(s.id||norm(s.name)||i);
-   const parentNames=[s.parent1,s.parent2].filter(Boolean).flatMap(split).concat(split(s.genetics));
+   const explicitParents=[
+     s.parent1||s.parent_1||s.parentA||(Array.isArray(s.parents)?s.parents[0]:''),
+     s.parent2||s.parent_2||s.parentB||(Array.isArray(s.parents)?s.parents[1]:'')
+   ].filter(Boolean).flatMap(split);
+   const parentNames=[...explicitParents,...split(s.genetics||s.cross||s.lineage||s.geneticLineage)];
    const seen=new Set();
    parentNames.forEach(parent=>{
      const n=norm(parent);if(!n||seen.has(n))return;seen.add(n);
@@ -660,7 +670,7 @@ function buildNetwork(){
  if(selectedNode){
    $('selectedName').textContent=selectedNode.name;
    $('selectedMeta').textContent=selectedNode.strain?
-    [selectedNode.strain.breeder||'Breeder nicht angegeben',selectedNode.strain.genetics||'Genetik nicht angegeben',selectedNode.strain.type||'Kategorie unbekannt'].join(' · '):
+    [selectedNode.strain.breeder||'Breeder nicht angegeben',selectedNode.strain.genetics||'Genetik nicht angegeben',selectedNode.strain.parent1||selectedNode.strain.parent2?('Eltern: '+[selectedNode.strain.parent1,selectedNode.strain.parent2].filter(Boolean).join(' × ')):'Eltern nicht eingetragen',selectedNode.strain.type||'Kategorie unbekannt'].join(' · '):
     'Elternlinie · noch nicht als eigene Sorte im Archiv gespeichert';
    $('editSelected').disabled=false;
    $('editSelected').textContent=selectedNode.strain?'Eintrag bearbeiten':'Elternlinie hinzufügen';
