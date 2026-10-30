@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#101713">
+<title>Botanical Archive — Meine Sorten</title>
+<style>
+:root{--bg:#0d1410;--panel:#151f19;--panel2:#1b2920;--line:#2b3b30;--text:#edf3ed;--muted:#9aaa9e;--green:#a8d5a0;--green2:#6f9e76;--gold:#d7c69a;--danger:#e69a91}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at 80% 0%,#1b3022 0,transparent 38%),var(--bg);color:var(--text);font:15px/1.5 Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,sans-serif}
+header{max-width:1200px;margin:auto;padding:34px 24px 22px;display:flex;align-items:center;justify-content:space-between;gap:20px}
+.brand{display:flex;gap:13px;align-items:center}.mark{width:42px;height:42px;border:1px solid #58765d;border-radius:14px;display:grid;place-items:center;color:var(--green);font-size:22px;background:#1a2a20}
+.eyebrow{color:var(--green);font-size:11px;letter-spacing:.2em;text-transform:uppercase;font-weight:700}.brand h1{font-size:20px;letter-spacing:.04em;margin:2px 0 0}
+.actions{display:flex;gap:9px;flex-wrap:wrap}.btn{border:1px solid var(--line);background:var(--panel2);color:var(--text);padding:10px 14px;border-radius:11px;font-weight:650;cursor:pointer}.btn:hover{border-color:var(--green2)}.btn.primary{background:var(--green);color:#102016;border-color:var(--green)}.btn.danger{color:var(--danger)}
+main{max-width:1200px;margin:auto;padding:0 24px 60px}
+.hero{padding:35px 0 26px;display:grid;grid-template-columns:1.4fr .6fr;gap:28px;align-items:end}.hero h2{font-size:clamp(32px,5vw,54px);line-height:1.03;letter-spacing:-.045em;margin:10px 0 13px;max-width:700px}.hero p{color:var(--muted);max-width:620px;margin:0}.stats{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}.stat{background:#17231b;border:1px solid var(--line);border-radius:16px;padding:16px}.stat strong{display:block;font-size:27px;color:var(--green);line-height:1.2}.stat span{font-size:12px;color:var(--muted)}
+.toolbar{display:flex;align-items:center;gap:12px;margin:20px 0 18px;flex-wrap:wrap}.search{flex:1;min-width:190px;background:var(--panel);border:1px solid var(--line);color:var(--text);padding:12px 14px;border-radius:12px;font:inherit}.filter{background:var(--panel);border:1px solid var(--line);color:var(--text);padding:12px;border-radius:12px;font:inherit}
+.grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}.card{overflow:hidden;border:1px solid var(--line);border-radius:18px;background:linear-gradient(160deg,#1a261e,#121a15);transition:.2s}.card:hover{transform:translateY(-3px);border-color:#59775e}.photo{height:220px;background:linear-gradient(135deg,#23392a,#101812);position:relative;overflow:hidden}.photo img{width:100%;height:100%;object-fit:cover;display:block}.photo .placeholder{height:100%;display:grid;place-items:center;color:#77947c;font-size:42px}.photo .tag{position:absolute;top:13px;left:13px;background:#0d1711d9;border:1px solid #526c56;color:#c8e4c6;border-radius:30px;padding:5px 10px;font-size:11px;letter-spacing:.06em}
+.cardbody{padding:17px}.cardhead{display:flex;justify-content:space-between;gap:10px;align-items:start}.card h3{font-size:20px;margin:0 0 3px}.sub{color:var(--muted);font-size:12px}.chips{display:flex;gap:6px;flex-wrap:wrap;margin:13px 0}.chip{font-size:11px;color:#c5d5c7;background:#223329;border:1px solid #344c39;padding:4px 8px;border-radius:20px}.metrics{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}.metric{background:#111a14;border-radius:10px;padding:9px 10px}.metric span{display:block;color:var(--muted);font-size:10px;text-transform:uppercase;letter-spacing:.08em}.metric b{font-size:14px;font-weight:650}.notes{color:#b7c4b9;font-size:12px;margin:12px 0 0;white-space:pre-wrap;overflow-wrap:anywhere}.cardfoot{border-top:1px solid var(--line);margin-top:14px;padding-top:12px;display:flex;justify-content:space-between;align-items:center}.textbtn{background:none;border:0;color:var(--green);cursor:pointer;font-weight:650;padding:5px 0}.empty{border:1px dashed #3a5140;border-radius:18px;padding:55px 20px;text-align:center;color:var(--muted);grid-column:1/-1}.empty strong{display:block;color:var(--text);font-size:18px;margin-bottom:7px}
+.network-panel{margin:22px 0 28px;border:1px solid #29334e;border-radius:20px;background:linear-gradient(145deg,#11172a,#090d19);padding:20px;overflow:hidden}
+.network-top{display:flex;justify-content:space-between;gap:18px;align-items:end;flex-wrap:wrap}.network-top h3{font-size:25px;margin:5px 0}.network-top p{color:var(--muted);margin:0;max-width:570px;font-size:13px}.network-controls{display:flex;gap:8px;flex-wrap:wrap}
+.network-legend{display:flex;gap:18px;align-items:center;flex-wrap:wrap;color:var(--muted);font-size:11px;margin:18px 0 10px}.legend-dot{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:6px}.legend-dot.filled{background:var(--green)}.legend-dot.hollow{border:1px solid var(--gold)}.legend-line{display:inline-block;width:24px;height:1px;background:#78927c}
+.network-canvas{height:560px;overflow:hidden;touch-action:none;border:1px solid #35446b;border-radius:14px;background:radial-gradient(ellipse at 18% 22%,#34406c55 0,transparent 34%),radial-gradient(ellipse at 78% 72%,#5b397044 0,transparent 36%),radial-gradient(ellipse at 52% 48%,#202e50 0,#10172b 46%,#070b16 100%);box-shadow:inset 0 0 80px #030611aa,0 18px 55px #0005;position:relative}#networkSvg{width:100%;height:100%;min-width:650px;display:block}
+.net-edge{fill:none;stroke:#9bb6ff;stroke-width:1.7;stroke-linecap:round;opacity:.66;stroke-dasharray:5 9;animation:laneFlow 18s linear infinite}.net-edge.fine{stroke:#b8c9f3;stroke-width:.8;opacity:.35}.net-edge.root-shadow{stroke:#536baf;stroke-width:5;opacity:.16}.net-node{cursor:pointer;transform-box:fill-box;transform-origin:center;transition:filter .22s ease}.net-node circle{fill:#d9e6ff;stroke:#a9c4ff;stroke-width:1.5}.net-node:hover{filter:brightness(1.45) drop-shadow(0 0 13px #9dbaff);}.net-node.placeholder circle{fill:#19233a;stroke:#a2afd0;stroke-dasharray:3 4}.net-node.hub circle{fill:#fff0c2;stroke:#ffe4a0;stroke-width:2.5}.net-node.hub .halo{fill:none;stroke:#b8caff;stroke-width:1.2;opacity:.72;stroke-dasharray:4 7;animation:orbitPulse 9s linear infinite}.net-node text{fill:#f0f4ff;font-size:13px;text-anchor:middle;pointer-events:none}.net-node .small{fill:#aebcdb;font-size:10px}.net-node.hub text{font-weight:750;font-size:14px}.net-node:hover circle{stroke:#fff5d6;stroke-width:4}.network-foot{color:var(--muted);font-size:12px;margin-top:10px}
+.parent-fields{grid-column:1/-1;display:grid;grid-template-columns:1fr 1fr;gap:13px;padding:13px;border:1px solid #314535;border-radius:13px;background:#17231b}.parent-fields .field{min-width:0}
+.parent-line{font-size:11px;color:#b9cbb9;margin-top:7px}
+
+@keyframes laneFlow{to{stroke-dashoffset:-140}}
+@keyframes orbitPulse{to{stroke-dashoffset:-110;transform:rotate(360deg)}}
+@keyframes starPulse{0%,100%{opacity:.82}50%{opacity:1}}
+.net-node circle:not(.halo){animation:starPulse 4.8s ease-in-out infinite}
+.net-node:nth-of-type(3n) circle:not(.halo){animation-delay:-1.7s}
+.net-node:nth-of-type(4n) circle:not(.halo){animation-delay:-3.1s}
+.net-node text{paint-order:stroke;stroke:#080d1a;stroke-width:3px;stroke-linejoin:round}
+.network-canvas:after{content:"";position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse at center,transparent 48%,#03061155 100%);border-radius:14px}
+@media(max-width:570px){.network-panel{padding:14px}.network-canvas{height:430px}.parent-fields{grid-template-columns:1fr}.network-top{align-items:start}}
+footer{color:#718176;text-align:center;font-size:11px;padding:25px}
+dialog{border:1px solid #405646;background:#121b15;color:var(--text);border-radius:20px;padding:0;width:min(650px,calc(100% - 24px));max-height:90vh;overflow:auto;box-shadow:0 25px 90px #000b}dialog::backdrop{background:#000a;backdrop-filter:blur(4px)}.modalhead{padding:20px 22px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center}.modalhead h3{margin:0;font-size:19px}.form{padding:20px 22px;display:grid;grid-template-columns:1fr 1fr;gap:13px}.field{display:flex;flex-direction:column;gap:6px}.field.full{grid-column:1/-1}.field label{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em}.field input,.field textarea,.field select{background:#0c140f;border:1px solid var(--line);border-radius:10px;color:var(--text);padding:11px;font:inherit;width:100%}.field textarea{min-height:85px;resize:vertical}.hint{font-size:11px;color:#849589}.modalfoot{padding:15px 22px 20px;display:flex;justify-content:flex-end;gap:9px}
+@media(max-width:850px){.grid{grid-template-columns:repeat(2,minmax(0,1fr))}.hero{grid-template-columns:1fr}.stats{max-width:380px}}
+@media(max-width:570px){header{padding:22px 16px;align-items:flex-start;flex-direction:column}.actions{width:100%}.actions .btn{flex:1}main{padding:0 16px 40px}.grid{grid-template-columns:1fr}.photo{height:235px}.form{grid-template-columns:1fr}.field.full{grid-column:auto}.hero{padding-top:25px}}
+</style>
+</head>
+<body>
+<header>
+  <div class="brand"><div class="mark">✳</div><div><div class="eyebrow">Personal collection</div><h1>BOTANICAL ARCHIVE</h1></div></div>
+  <div class="actions">
+    <button class="btn" id="exportBtn">↓ Daten sichern</button>
+    <button class="btn" id="importBtn">↑ Daten laden</button>
+    <button class="btn" id="networkBtn">✳ Sortensystem</button>
+    <button class="btn primary" id="addBtn">＋ Sorte hinzufügen</button>
+    <input type="file" id="importFile" accept="application/json" hidden>
+  </div>
+</header>
+<main>
+  <section class="hero">
+    <div><div class="eyebrow">Deine private Sammlung</div><h2>Jede Sorte erzählt<br>ihre eigene Geschichte.</h2><p>Ein persönliches Archiv für Sorten, Bilder, Eigenschaften und deine eigenen Notizen. Gestalte deine Sammlung so, wie sie zu dir passt.</p></div>
+    <div class="stats"><div class="stat"><strong id="totalCount">0</strong><span>Sorten in deiner Sammlung</span></div><div class="stat"><strong id="photoCount">0</strong><span>Mit Bild dokumentiert</span></div></div>
+  </section>
+  <section id="networkPanel" class="network-panel" hidden>
+    <div class="network-top">
+      <div><div class="eyebrow">Genetische Verbindungen</div><h3>Dein Sortensystem</h3><p>Elternlinien, Kreuzungen und gemeinsame Vorfahren auf einen Blick. Kreuzungsnamen werden in einzelne Genetik-Knoten zerlegt. Klicke einen Knoten an, um einen Eintrag zu öffnen.</p></div>
+      <div class="network-controls"><select id="focusFilter" class="filter"><option value="">Alle Sorten anzeigen</option></select><button class="btn" id="zoomOut" type="button" title="Verkleinern">−</button><button class="btn" id="zoomReadout" type="button" title="Zoom zurücksetzen">100%</button><button class="btn" id="zoomIn" type="button" title="Vergrößern">＋</button><button class="btn" id="resetNetwork">Ansicht zurücksetzen</button></div>
+    </div>
+    <div class="network-legend"><span><i class="legend-dot filled"></i> Sorte in deiner Sammlung</span><span><i class="legend-dot hollow"></i> Elternlinie noch nicht angelegt</span><span class="legend-line"></span> Elternteil → Nachkomme</div>
+    <div class="network-canvas"><svg id="networkSvg" viewBox="0 0 1000 620" role="img" aria-label="Interaktives Netzwerk deiner Sortengenetik"></svg></div>
+    <div class="network-foot" id="networkHint">Ergänze bei deinen Sorten die beiden Elternlinien, damit sich das Netzwerk aufbaut.</div>
+  </section>
+  <div class="toolbar">
+    <input class="search" id="search" placeholder="⌕  Sorten, Genetik oder Notizen suchen …">
+    <select class="filter" id="typeFilter"><option value="">Alle Kategorien</option><option>Indica</option><option>Sativa</option><option>Hybrid</option><option>Unbekannt</option></select>
+    <select class="filter" id="sortFilter"><option value="new">Zuletzt hinzugefügt</option><option value="az">Name A–Z</option></select>
+  </div>
+  <section class="grid" id="grid"></section>
+</main>
+<footer>BOTANICAL ARCHIVE · Deine Sammlung bleibt auf diesem Gerät, solange du deine Browserdaten nicht löschst.</footer>
+
+<dialog id="editor">
+  <div class="modalhead"><h3 id="modalTitle">Neue Sorte</h3><button class="btn" id="closeModal" type="button">✕</button></div>
+  <form id="strainForm" novalidate>
+    <div class="form">
+      <div class="field"><label for="name">Sortenname *</label><input id="name" required maxlength="70" placeholder="z. B. Northern Lights"></div>
+      <div class="field"><label for="breeder">Breeder / Züchter</label><input id="breeder" maxlength="70" placeholder="Name des Breeders"></div>
+      <div class="field"><label for="genetics">Genetik / Kreuzung</label><input id="genetics" maxlength="100" placeholder="z. B. Dosidos x Purple Punch"></div>
+      <div class="parent-fields">
+        <div class="field"><label for="parent1">Elternteil 1</label><input id="parent1" maxlength="70" placeholder="Name der ersten Elternsorte"></div>
+        <div class="field"><label for="parent2">Elternteil 2</label><input id="parent2" maxlength="70" placeholder="Name der zweiten Elternsorte"></div>
+        <span class="hint" style="grid-column:1/-1">Trage die Elternsorten hier ein. Kreuzungen im Feld „Genetik / Kreuzung“ werden ebenfalls in einzelne Bestandteile zerlegt, damit gemeinsame Linien sichtbar werden.</span>
+      </div>
+      <div class="field"><label for="type">Kategorie</label><select id="type"><option>Unbekannt</option><option>Indica</option><option>Sativa</option><option>Hybrid</option></select></div>
+      <div class="field"><label for="thc">THC-Wert</label><input id="thc" maxlength="35" placeholder="z. B. 20–24 %"></div>
+      <div class="field"><label for="cbd">CBD-Wert</label><input id="cbd" maxlength="35" placeholder="z. B. unter 1 %"></div>
+      <div class="field"><label for="aroma">Aroma / Geschmack</label><input id="aroma" maxlength="100" placeholder="z. B. erdig, fruchtig, würzig"></div>
+      <div class="field"><label for="rating">Persönliche Bewertung</label><select id="rating"><option value="">Noch nicht bewertet</option><option>★</option><option>★★</option><option>★★★</option><option>★★★★</option><option>★★★★★</option></select></div>
+      <div class="field full"><label for="photo">Sortenbild</label><input id="photo" type="file" accept="image/*"><span class="hint">Ein Bild auswählen. Es wird lokal in diesem Browser gespeichert.</span></div>
+      <div class="field full"><label for="notes">Eigene Notizen / weitere Werte</label><textarea id="notes" maxlength="1200" placeholder="Hier kannst du beliebige Informationen und Beobachtungen festhalten …"></textarea></div>
+    </div>
+    <div class="modalfoot"><button class="btn" type="button" id="cancelBtn">Abbrechen</button><button class="btn primary" type="button" id="saveEntryBtn">Eintrag speichern</button></div>
+  </form>
+</dialog>
+<script>
+const KEY='botanical_archive_v1';
+let strains=[];
+let editing=null, pendingImage=null;
+const $=id=>document.getElementById(id);
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+let dbPromise=null;
+function openArchiveDB(){
+ if(!('indexedDB' in window)) return Promise.reject(new Error('IndexedDB wird von diesem Browser nicht unterstützt.'));
+ if(!dbPromise) dbPromise=new Promise((resolve,reject)=>{
+   const req=indexedDB.open('BotanicalArchiveDB',1);
+   req.onupgradeneeded=()=>{if(!req.result.objectStoreNames.contains('archive'))req.result.createObjectStore('archive')};
+   req.onsuccess=()=>resolve(req.result);req.onerror=()=>reject(req.error);
+ });
+ return dbPromise;
+}
+async function readArchiveDB(){
+ const db=await openArchiveDB();
+ return new Promise((resolve,reject)=>{const tx=db.transaction('archive','readonly');const req=tx.objectStore('archive').get(KEY);req.onsuccess=()=>resolve(Array.isArray(req.result)?req.result:[]);req.onerror=()=>reject(req.error)});
+}
+async function writeArchiveDB(value){
+ const db=await openArchiveDB();
+ return new Promise((resolve,reject)=>{const tx=db.transaction('archive','readwrite');tx.objectStore('archive').put(value,KEY);tx.oncomplete=()=>resolve(true);tx.onerror=()=>reject(tx.error);tx.onabort=()=>reject(tx.error||new Error('Speichern abgebrochen'))});
+}
+async function save(){
+ try{localStorage.setItem(KEY,JSON.stringify(strains));return true}
+ catch(localError){
+   try{await writeArchiveDB(strains);return true}
+   catch(dbError){console.error('Speichern fehlgeschlagen:',localError,dbError);alert('Der Browser blockiert sowohl den lokalen Speicher als auch IndexedDB. Bitte öffne die Website über eine normale https-Adresse (z. B. GitHub Pages) statt als lokale Datei.');return false}
+ }
+}
+async function loadSavedData(){
+ let localData=[],dbData=[];
+ try{const raw=localStorage.getItem(KEY);if(raw){const data=JSON.parse(raw);if(Array.isArray(data))localData=data}}catch(e){console.warn('LocalStorage konnte nicht gelesen werden:',e)}
+ try{dbData=await readArchiveDB()}catch(e){console.warn('IndexedDB konnte nicht gelesen werden:',e)}
+ // Bei identischen IDs gewinnt der jeweils vollständigere/neue Datensatz; keine Quelle wird still verworfen.
+ const merged=new Map();
+ [...dbData,...localData].forEach((item,i)=>{
+   if(!item||typeof item.name!=='string')return;
+   const key=item.id||('name:'+item.name.trim().toLowerCase());
+   const previous=merged.get(key);
+   merged.set(key,previous?{...previous,...item}:item);
+ });
+ strains=[...merged.values()];
+ // Falls die Browser-Speicherart gewechselt hat, beide Speicher nach Möglichkeit synchronisieren.
+ if(strains.length){try{localStorage.setItem(KEY,JSON.stringify(strains))}catch(e){}try{await writeArchiveDB(strains)}catch(e){}}
+}
+function render(){
+ const q=$('search').value.toLowerCase(), typ=$('typeFilter').value, sort=$('sortFilter').value;
+ let list=strains.filter(s=>(!typ||s.type===typ)&&[s.name,s.breeder,s.genetics,s.parent1,s.parent2,s.aroma,s.notes].join(' ').toLowerCase().includes(q));
+ if(sort==='az')list.sort((a,b)=>a.name.localeCompare(b.name,'de'));else list.sort((a,b)=>b.created-a.created);
+ $('totalCount').textContent=strains.length;$('photoCount').textContent=strains.filter(s=>s.image).length;
+ $('grid').innerHTML=list.length?list.map(s=>`<article class="card">
+ <div class="photo">${s.image?`<img src="${s.image}" alt="${esc(s.name)}">`:`<div class="placeholder">✳</div>`}<span class="tag">${esc(s.type||'Unbekannt')}</span></div>
+ <div class="cardbody"><div class="cardhead"><div><h3>${esc(s.name)}</h3><div class="sub">${esc(s.breeder||'Breeder nicht angegeben')}</div></div></div>
+ <div class="chips">${s.genetics?`<span class="chip">${esc(s.genetics)}</span>`:''}${s.aroma?`<span class="chip">${esc(s.aroma)}</span>`:''}</div>
+ ${s.parent1||s.parent2?`<div class="parent-line">↳ Eltern: ${esc([s.parent1,s.parent2].filter(Boolean).join(' × '))}</div>`:''}
+ <div class="metrics"><div class="metric"><span>THC</span><b>${esc(s.thc||'—')}</b></div><div class="metric"><span>CBD</span><b>${esc(s.cbd||'—')}</b></div><div class="metric"><span>Bewertung</span><b>${esc(s.rating||'—')}</b></div><div class="metric"><span>Kategorie</span><b>${esc(s.type||'—')}</b></div></div>
+ ${s.notes?`<p class="notes">${esc(s.notes)}</p>`:''}
+ <div class="cardfoot"><span class="sub">Persönlicher Eintrag</span><div><button class="textbtn" data-edit="${s.id}">Bearbeiten</button>　<button class="textbtn" data-delete="${s.id}" style="color:var(--danger)">Löschen</button></div></div></div></article>`).join(''):`<div class="empty"><strong>${q||typ?'Keine passenden Sorten gefunden':'Dein Archiv wartet auf den ersten Eintrag.'}</strong>${q||typ?'Passe deine Suche oder Filter an.':'Füge eine Sorte hinzu und ergänze Bilder, Werte und persönliche Notizen.'}</div>`;
+}
+function openEditor(s=null){
+ editing=s?.id??null;pendingImage=s?.image||null;$('modalTitle').textContent=s?'Sorte bearbeiten':'Neue Sorte';
+ ['name','breeder','genetics','parent1','parent2','type','thc','cbd','aroma','rating','notes'].forEach(k=>$(k).value=s?.[k]??(k==='type'?'Unbekannt':''));
+ $('photo').value='';$('editor').showModal();
+}
+function closeEditor(){$('editor').close();editing=null;pendingImage=null}
+$('addBtn').onclick=()=>openEditor();$('closeModal').onclick=closeEditor;$('cancelBtn').onclick=closeEditor;
+$('photo').onchange=e=>{const f=e.target.files[0];if(!f)return;if(f.size>5*1024*1024){alert('Bitte ein Bild unter 5 MB auswählen.');e.target.value='';return}const r=new FileReader();r.onload=()=>pendingImage=r.result;r.readAsDataURL(f)};
+async function saveCurrentStrain(){
+ const saveBtn=$('saveEntryBtn');
+ if(saveBtn.dataset.busy==='1')return;
+ const name=$('name').value.trim();
+ if(!name){alert('Bitte gib zuerst einen Sortennamen ein.');$('name').focus();return}
+ saveBtn.dataset.busy='1';saveBtn.disabled=true;saveBtn.textContent='Speichert …';
+ try{
+  const data={id:editing||('strain-'+Date.now()+'-'+Math.random().toString(36).slice(2,9)),created:Date.now(),image:pendingImage};
+  ['name','breeder','genetics','parent1','parent2','type','thc','cbd','aroma','rating','notes'].forEach(k=>data[k]=$(k).value.trim());
+  if(editing){const old=strains.find(s=>s.id===editing);data.created=old?.created||Date.now();strains=strains.map(s=>s.id===editing?data:s)}
+  else strains.push(data);
+  if(await save()){closeEditor();render();if(!$('networkPanel').hidden)buildNetwork();alert('Sorte wurde gespeichert.')}
+  else {if(!editing)strains=strains.filter(x=>x.id!==data.id)}
+ }catch(err){console.error(err);alert('Beim Speichern ist ein Fehler aufgetreten: '+(err?.message||err))}
+ finally{saveBtn.dataset.busy='0';saveBtn.disabled=false;saveBtn.textContent='Eintrag speichern'}
+}
+$('saveEntryBtn').addEventListener('click',saveCurrentStrain);
+$('strainForm').addEventListener('submit',e=>{e.preventDefault();saveCurrentStrain()});
+$('grid').onclick=async e=>{const edit=e.target.closest('[data-edit]'),del=e.target.closest('[data-delete]');if(edit){const s=strains.find(x=>x.id===edit.dataset.edit);if(s)openEditor(s)}if(del&&confirm('Diesen Sorten-Eintrag wirklich löschen?')){strains=strains.filter(x=>x.id!==del.dataset.delete);if(await save()){render();if(!$('networkPanel').hidden)buildNetwork()}}};
+['search','typeFilter','sortFilter'].forEach(id=>$(id).addEventListener(id==='search'?'input':'change',render));
+$('exportBtn').onclick=()=>{const blob=new Blob([JSON.stringify(strains,null,2)],{type:'application/json'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='botanical-archive-backup.json';a.click();URL.revokeObjectURL(url)};
+$('importBtn').onclick=()=>$('importFile').click();
+$('importFile').onchange=async e=>{const f=e.target.files[0];if(!f)return;try{const data=JSON.parse(await f.text());if(!Array.isArray(data)||!data.every(x=>x&&typeof x.name==='string'))throw Error();if(confirm('Import ergänzt deine aktuelle Sammlung. Vorhandene Sorten bleiben erhalten; gleiche IDs bzw. gleiche Namen werden aktualisiert. Fortfahren?')){const merged=new Map();[...strains,...data].forEach(item=>{const k=item.id||('name:'+item.name.trim().toLowerCase());merged.set(k,{...(merged.get(k)||{}),...item})});strains=[...merged.values()];if(await save()){render();if(!$('networkPanel').hidden)buildNetwork();alert('Import abgeschlossen: vorhandene Sorten wurden beibehalten und neue ergänzt.')}}}catch(err){alert('Die Datei konnte nicht als Archiv gelesen werden.')}e.target.value=''};
+
+// Sortensystem: Zoom und Verschieben
+let netWorldW=1000, netWorldH=620, netZoom=1, netPanX=0, netPanY=0, netDragging=false, netLastX=0, netLastY=0;
+function updateNetView(){
+ const world=$('networkWorld');
+ if(world)world.setAttribute('transform',`translate(${netPanX} ${netPanY}) scale(${netZoom})`);
+ const readout=$('zoomReadout');if(readout)readout.textContent=Math.round(netZoom*100)+'%';
+}
+function changeNetZoom(next){
+ const old=netZoom;netZoom=Math.max(.55,Math.min(3.2,next));
+ const factor=netZoom/old;netPanX=netWorldW/2-(netWorldW/2-netPanX)*factor;netPanY=netWorldH/2-(netWorldH/2-netPanY)*factor;
+ updateNetView();
+}
+function resetNetView(){netZoom=1;netPanX=0;netPanY=0;updateNetView()}
+function buildNetwork(){
+ const panel=$('networkPanel'), svg=$('networkSvg'), focus=$('focusFilter');
+ const old=focus.value;
+ focus.innerHTML='<option value="">Alle Sorten anzeigen</option>'+strains.map(s=>`<option value="${esc(s.id)}">${esc(s.name)}</option>`).join('');
+ focus.value=strains.some(s=>s.id===old)?old:'';
+ const nodes=new Map(), edges=[];
+ strains.forEach(s=>nodes.set('s:'+s.id,{key:'s:'+s.id,name:s.name,strain:s,placeholder:false}));
+ function normGeneticName(value){
+   return String(value||'').normalize('NFKD').replace(/[\\u0300-\\u036f]/g,'')
+     .toLowerCase().replace(/\\b(the|strain)\\b/g,'').replace(/[^a-z0-9]+/g,' ').trim();
+ }
+ function splitLineage(value){
+   // Unterstützt z. B. "Do-Si-Dos x Purple Punch", "A × B" und mehrstufige Kreuzungen.
+   return String(value||'').split(/\\s*(?:x|×|\\*|\\+|\\bby\\b)\\s*/i).map(v=>v.trim()).filter(Boolean);
+ }
+ const aliases=new Map();
+ strains.forEach(s=>{
+   const key='s:'+s.id;
+   [s.name,...splitLineage(s.genetics)].forEach(label=>{
+     const norm=normGeneticName(label);if(norm&&!aliases.has(norm))aliases.set(norm,key);
+   });
+ });
+ strains.forEach(s=>{
+   const child='s:'+s.id;
+   const parents=[s.parent1,s.parent2].filter(Boolean).flatMap(v=>splitLineage(v));
+   // Die Kreuzung im Genetik-Feld liefert ebenfalls gemeinsame Vorfahren/Komponenten.
+   const geneticsParts=splitLineage(s.genetics);
+   const all=[...parents,...geneticsParts];
+   const seen=new Set();
+   all.forEach(parent=>{
+     const norm=normGeneticName(parent);if(!norm||seen.has(norm))return;seen.add(norm);
+     const matchedKey=aliases.get(norm);
+     // Eine Sorte soll nicht mit sich selbst verbunden werden.
+     const key=matchedKey&&matchedKey!==child?matchedKey:'p:'+norm;
+     const existing=nodes.get(key);
+     if(!existing)nodes.set(key,{key,name:parent,strain:null,placeholder:true});
+     if(!edges.some(e=>e.from===key&&e.to===child))edges.push({from:key,to:child});
+   });
+ });
+ let arr=[...nodes.values()];
+ if(!arr.length){svg.innerHTML='<text x="500" y="300" fill="#9aaa9e" text-anchor="middle" font-size="17">Noch keine Sorten vorhanden — füge Sorten und ihre Eltern hinzu.</text>';$('networkHint').textContent='Sobald du Elternlinien einträgst, entsteht hier dein Sortensystem.';return}
+ let active=focus.value;
+ if(active){
+   const connected=new Set([ 's:'+active ]);
+   let changed=true;
+   while(changed){changed=false;edges.forEach(e=>{if(connected.has(e.to)&&!connected.has(e.from)){connected.add(e.from);changed=true}if(connected.has(e.from)&&!connected.has(e.to)){connected.add(e.to);changed=true}})}
+   arr=arr.filter(n=>connected.has(n.key));
+ }
+ const visible=new Set(arr.map(n=>n.key)), links=edges.filter(e=>visible.has(e.from)&&visible.has(e.to));
+ const degree=new Map(arr.map(n=>[n.key,0]));
+ links.forEach(e=>{degree.set(e.from,(degree.get(e.from)||0)+1);degree.set(e.to,(degree.get(e.to)||0)+1)});
+ // Verbundene Sortengruppen ermitteln: voneinander unabhängige Linien erhalten eigene Bereiche.
+ const byKeyTemp=new Map(arr.map(n=>[n.key,n]));
+ const adjacency=new Map(arr.map(n=>[n.key,new Set()]));
+ links.forEach(e=>{adjacency.get(e.from)?.add(e.to);adjacency.get(e.to)?.add(e.from)});
+ const components=[], visited=new Set();
+ arr.forEach(n=>{
+   if(visited.has(n.key))return;
+   const stack=[n.key], group=[];visited.add(n.key);
+   while(stack.length){
+     const key=stack.pop(), node=byKeyTemp.get(key);
+     if(node)group.push(node);
+     (adjacency.get(key)||[]).forEach(next=>{if(!visited.has(next)){visited.add(next);stack.push(next)}});
+   }
+   components.push(group);
+ });
+
+ const largest=Math.max(1,...components.map(c=>c.length));
+ const cellW=Math.max(340,Math.ceil(Math.sqrt(largest))*175);
+ const cellH=Math.max(300,Math.ceil(Math.sqrt(largest))*165);
+ const cols=Math.max(1,Math.ceil(Math.sqrt(components.length)));
+ const rows=Math.ceil(components.length/cols);
+ const worldW=Math.max(1000,cols*cellW+100), worldH=Math.max(620,rows*cellH+100);
+ netWorldW=worldW;netWorldH=worldH;
+ svg.setAttribute('viewBox',`0 0 ${worldW} ${worldH}`);
+ // Jede Gruppe bekommt eine eigene Zelle. Innerhalb der Zelle werden Knoten abgestoßen
+ // und direkte Eltern-Kind-Verbindungen auf angenehmem Abstand gehalten.
+ components.forEach((group,gi)=>{
+   const col=gi%cols,row=Math.floor(gi/cols);
+   const cx=50+col*cellW+cellW/2,cy=50+row*cellH+cellH/2;
+   const count=group.length, radius=Math.max(45,Math.min(cellW,cellH)*.28, count*19);
+   group.forEach((n,i)=>{
+     const a=2*Math.PI*i/count-Math.PI/2;
+     n.x=cx+Math.cos(a)*radius;n.y=cy+Math.sin(a)*radius;n.vx=0;n.vy=0;
+   });
+   const groupKeys=new Set(group.map(n=>n.key));
+   const groupLinks=links.filter(e=>groupKeys.has(e.from)&&groupKeys.has(e.to));
+   for(let step=0;step<260;step++){
+     group.forEach((a,i)=>{
+       group.slice(i+1).forEach(b=>{
+         let dx=a.x-b.x,dy=a.y-b.y,d=Math.sqrt(dx*dx+dy*dy)||1;
+         const min=138,force=d<min?(min-d)*.055:1700/(d*d);
+         a.vx+=dx/d*force;b.vx-=dx/d*force;
+         a.vy+=dy/d*force;b.vy-=dy/d*force;
+       });
+     });
+     groupLinks.forEach(e=>{
+       const a=byKeyTemp.get(e.from),b=byKeyTemp.get(e.to);if(!a||!b)return;
+       let dx=b.x-a.x,dy=b.y-a.y,d=Math.sqrt(dx*dx+dy*dy)||1;
+       const force=(d-155)*.0025;
+       a.vx+=dx*force;a.vy+=dy*force;b.vx-=dx*force;b.vy-=dy*force;
+     });
+     group.forEach(n=>{
+       n.vx+=(cx-n.x)*.0018;n.vy+=(cy-n.y)*.0018;
+       n.vx*=.78;n.vy*=.78;n.x+=n.vx;n.y+=n.vy;
+       n.x=Math.max(cx-cellW/2+65,Math.min(cx+cellW/2-65,n.x));
+       n.y=Math.max(cy-cellH/2+65,Math.min(cy+cellH/2-65,n.y));
+     });
+   }
+ });
+ const byKey=new Map(arr.map(n=>[n.key,n]));
+ let out='<defs><filter id="glow"><feGaussianBlur stdDeviation="5" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs><g id="networkWorld">';
+ // Sternenfeld: dezente Hintergrundsterne als Orientierung im Raum.
+ const starSeed=(i)=>{const x=(i*137.508)%worldW,y=(i*91.713+47)%worldH,r=0.7+(i%4)*.35;return `<circle cx="${x}" cy="${y}" r="${r}" fill="#c8d8ff" opacity="${.18+(i%5)*.09}"/>`};
+ out+=`<g class="deep-space">${Array.from({length:Math.min(150,Math.max(70,Math.floor(worldW*worldH/9000)))},(_,i)=>starSeed(i)).join('')}</g>`;
+ // Verbindungen als feine leuchtende Bahnen zwischen Sternensystemen.
+ links.forEach((e,i)=>{
+   const a=byKey.get(e.from),b=byKey.get(e.to);if(!a||!b)return;
+   const dx=b.x-a.x,dy=b.y-a.y,len=Math.sqrt(dx*dx+dy*dy)||1;
+   const nx=-dy/len,ny=dx/len;
+   const bend=((i%2)?1:-1)*Math.min(48,len*.19);
+   const mx=(a.x+b.x)/2+nx*bend,my=(a.y+b.y)/2+ny*bend;
+   const d=`M ${a.x} ${a.y} Q ${mx} ${my} ${b.x} ${b.y}`;
+   out+=`<path class="net-edge root-shadow" d="${d}"/><path class="net-edge" d="${d}"/><path class="net-edge fine" d="${d}"/>`;
+ });
+ // Knotenpunkte: große, mehrfach verbundene Sorten werden zu hellen Leitsternen.
+ arr.forEach(n=>{
+   const isParent=n.placeholder,connections=degree.get(n.key)||0,hub=!isParent&&connections>=2;
+   const label=n.name.length>20?n.name.slice(0,18)+'…':n.name;
+   const r=isParent?18:(hub?29:22);
+   const detail=n.strain?`${n.name} · ${n.strain.type||'Kategorie unbekannt'} · ${n.strain.breeder||'Breeder unbekannt'}${n.strain.genetics?' · '+n.strain.genetics:''}${n.strain.parent1||n.strain.parent2?' · Eltern: '+[n.strain.parent1,n.strain.parent2].filter(Boolean).join(' × '):''}`:`${n.name} · Noch kein eigener Sorteneintrag`;
+   out+=`<g class="net-node ${isParent?'placeholder':''} ${hub?'hub':''}" data-node="${esc(n.key)}" tabindex="0" role="button" aria-label="${esc(detail)}" transform="translate(${n.x},${n.y})"><title>${esc(detail)} — Anklicken zum Öffnen</title>
+     ${hub?`<circle class="halo" r="${r+12}"/><path d="M 0 ${-r-9} L 3 ${-5} L ${r+9} 0 L 5 3 L 0 ${r+9} L -3 5 L ${-r-9} 0 L -5 -3 Z" fill="#ffe8ad" opacity=".7"/>`:''}
+     <circle r="${r}" filter="url(#glow)"/>
+     ${isParent?`<circle r="5" fill="#b9c9f5" stroke="none"/>`:`<circle r="${hub?7:5}" fill="${hub?'#fff7d9':'#ffffff'}" stroke="none"/>`}
+     <text y="${r+18}">${esc(label)}</text>
+     <text class="small" y="${r+32}">${isParent?'Unbekannte Linie':(hub?'Schlüssel-Sorte':'Sorte')}</text>
+   </g>`;
+ });
+ out+='</g>';svg.innerHTML=out;updateNetView();
+ const activateNode=el=>{
+   const n=byKey.get(el.dataset.node);if(!n)return;
+   if(n.strain)openEditor(n.strain);
+   else if(confirm(`Für „${n.name}“ einen eigenen Sorteneintrag anlegen?`))openEditor({name:n.name,type:'Unbekannt'});
+ };
+ svg.querySelectorAll('[data-node]').forEach(el=>{
+   el.addEventListener('click',()=>activateNode(el));
+   el.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();activateNode(el)}});
+ });
+ const missing=arr.filter(n=>n.placeholder).length;
+ $('networkHint').textContent=`${strains.length} gespeicherte Sorten · ${arr.length-missing} sichtbare Sorten · ${missing} noch nicht angelegte Elternlinien · ${links.length} Verbindungen. ${active?'Fokusansicht: nur das Verwandtschaftsnetz der ausgewählten Sorte.':'Alle erfassten Verbindungen deiner Sammlung.'}`;
+}
+$('networkBtn').onclick=()=>{const p=$('networkPanel');p.hidden=!p.hidden;if(!p.hidden){buildNetwork();p.scrollIntoView({behavior:'smooth',block:'start'})}};
+$('focusFilter').onchange=buildNetwork;
+$('resetNetwork').onclick=()=>{$('focusFilter').value='';resetNetView();buildNetwork()};
+$('zoomIn').onclick=()=>changeNetZoom(netZoom*1.2);
+$('zoomOut').onclick=()=>changeNetZoom(netZoom/1.2);
+$('zoomReadout').onclick=resetNetView;
+$('networkSvg').addEventListener('wheel',e=>{if($('networkPanel').hidden)return;e.preventDefault();changeNetZoom(netZoom*(e.deltaY<0?1.12:1/1.12))},{passive:false});
+const netCanvas=document.querySelector('.network-canvas');
+netCanvas.addEventListener('pointerdown',e=>{if(e.target.closest('[data-node]'))return;netDragging=true;netLastX=e.clientX;netLastY=e.clientY;netCanvas.setPointerCapture(e.pointerId)});
+netCanvas.addEventListener('pointermove',e=>{if(!netDragging)return;const dx=e.clientX-netLastX,dy=e.clientY-netLastY;netLastX=e.clientX;netLastY=e.clientY;netPanX+=dx*netWorldW/netCanvas.clientWidth;netPanY+=dy*netWorldH/netCanvas.clientHeight;updateNetView()});
+const stopNetDrag=()=>{netDragging=false};netCanvas.addEventListener('pointerup',stopNetDrag);netCanvas.addEventListener('pointercancel',stopNetDrag);
+
+loadSavedData().then(()=>render());
+</script>
+</body>
+</html>
