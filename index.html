@@ -544,7 +544,7 @@ function buildNetwork(){
  strains.forEach((s,i)=>{
    const key='s:'+(s.id||norm(s.name)||i);
    nodes.set(key,{key,name:s.name,strain:s,placeholder:false,index:i});
-   [s.name,...split(s.genetics)].forEach(label=>{const n=norm(label);if(n&&!aliases.has(n))aliases.set(n,key)});
+   [s.name].forEach(label=>{const n=norm(label);if(n&&!aliases.has(n))aliases.set(n,key)});
  });
  strains.forEach((s,i)=>{
    const child='s:'+(s.id||norm(s.name)||i);
