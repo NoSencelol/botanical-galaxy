@@ -255,6 +255,7 @@ dialog{background:linear-gradient(145deg,#18271d,#0f1913);border-color:#607c61;b
 .web-edge.cross-edge{stroke:#f4c43b;stroke-width:1.25;opacity:.78;filter:drop-shadow(0 0 3px #f4c43b55)}
 .web-node{cursor:pointer;outline:none}
 .web-node .node-dot{vector-effect:non-scaling-stroke}
+.web-node.hub-node .archive-dot{fill:#ffe079;stroke:#fff0b7;stroke-width:1.1;filter:drop-shadow(0 0 5px #f5d35d) drop-shadow(0 0 11px #d6a93488)}
 .archive-dot{fill:#f5c637;stroke:#f5c637;stroke-width:.6;filter:drop-shadow(0 0 2px #f5c63755)}
 .parent-dot{fill:#050505;stroke:#aaa9a3;stroke-width:1.15}
 .web-node.ancestor-node .archive-dot{fill:#fff;stroke:#fff;filter:drop-shadow(0 0 5px #fff)}
@@ -263,7 +264,8 @@ dialog{background:linear-gradient(145deg,#18271d,#0f1913);border-color:#607c61;b
 .web-node.selected-node .archive-dot{fill:#ffe073;stroke:#fff0b3;stroke-width:1.4;filter:drop-shadow(0 0 8px #ffd64c)}
 .web-node.selected-node .parent-dot{stroke:#ffd04b;stroke-width:1.7}
 .node-selection{fill:none;stroke:#f6d35f;stroke-width:1.2;opacity:.9;filter:drop-shadow(0 0 5px #f4c744)}
-.node-label{fill:#e4d6a8;font:600 10px Inter,system-ui,sans-serif;text-anchor:middle;paint-order:stroke;stroke:#080808;stroke-width:3px;stroke-linejoin:round;pointer-events:none;opacity:.92}.node-label.active{fill:#fff1c4;font-size:12px;opacity:1;filter:drop-shadow(0 0 4px #f5d35d66)}
+.node-label{fill:#e4d6a8;font:600 10px Inter,system-ui,sans-serif;text-anchor:middle;paint-order:stroke;stroke:#080808;stroke-width:3px;stroke-linejoin:round;pointer-events:none;opacity:.92}.node-label.hub-label{fill:#ffe6a3;font-size:11px;font-weight:800;opacity:1}
+.node-label.active{fill:#fff1c4;font-size:12px;opacity:1;filter:drop-shadow(0 0 4px #f5d35d66)}
 .node-label.parent-label{fill:#aaa9a3;font-size:9px;font-weight:500;opacity:.86}.node-label.parent-label.active{fill:#fff4c9;font-size:12px;font-weight:700;opacity:1}
 .web-node:focus .node-selection{stroke:#fff;stroke-width:2}
 .web-map-legend{position:absolute;z-index:3;left:16px;bottom:18px;display:grid;gap:6px;padding:10px 12px;background:#050505c9;border-radius:10px;color:#d3d3d3;font-size:11px;backdrop-filter:blur(6px)}
@@ -271,6 +273,7 @@ dialog{background:linear-gradient(145deg,#18271d,#0f1913);border-color:#607c61;b
 .web-map-legend small{color:#858585;margin-top:2px}
 .legend-swatch{width:9px;height:9px;border-radius:50%;display:inline-block;flex:none}
 .legend-swatch.archive{background:#f5c637}
+.legend-swatch.hub{background:#ffe079;box-shadow:0 0 7px #f5d35d}
 .legend-swatch.parent{border:1px solid #aaa;background:transparent}
 .legend-swatch.selected{border:2px solid #f5d35d;box-shadow:0 0 5px #f5d35d}
 .web-map-help{position:absolute;right:16px;bottom:20px;color:#8b8b8b;font-size:10px;z-index:3;text-align:right}
@@ -358,7 +361,8 @@ dialog{background:linear-gradient(145deg,#18271d,#0f1913);border-color:#607c61;b
           <div><i class="legend-swatch archive"></i> Archive strain</div>
           <div><i class="legend-swatch parent"></i> Parent line</div>
           <div><i class="legend-swatch selected"></i> Ausgewählte Familie</div>
-          <small>Größerer Punkt = mehr Kreuzungen</small>
+          <div><i class="legend-swatch hub"></i> Genetik-Knoten (4+ direkte Verbindungen)</div>
+          <small>Normale Sorten sind einheitlich dargestellt.</small>
         </div>
         <div class="web-map-help">Ziehen zum Verschieben · Scrollen oder Pinch zum Zoomen</div>
       </div>
@@ -687,14 +691,16 @@ function buildNetwork(){
  arr.forEach(n=>{
    const isSelected=n.key===selected,isAnc=ancestors.has(n.key),isCross=descendants.has(n.key)&&!isSelected;
    const d=degree.get(n.key)||0;
-   const radius=n.placeholder?3.1:Math.min(8.5,3.1+Math.sqrt(d)*1.05);
-   const classes='web-node '+(n.placeholder?'parent-node ':'archive-node ')+(isSelected?'selected-node ':isAnc?'ancestor-node ':isCross?'cross-node ':'');
-   const title=n.name+(n.strain?' · '+(n.strain.breeder||'Archiv-Sorte'):' · Elternlinie');
+   // Alle normalen Archivsorten bleiben identisch. Nur echte Knoten mit 4+ direkten Verbindungen werden hervorgehoben.
+   const isHub=!n.placeholder&&d>=4;
+   const radius=n.placeholder?3.1:(isHub?7.5:3.2);
+   const classes='web-node '+(n.placeholder?'parent-node ':'archive-node ')+(isHub?'hub-node ':'')+(isSelected?'selected-node ':isAnc?'ancestor-node ':isCross?'cross-node ':'');
+   const title=n.name+(n.strain?' · '+(n.strain.breeder||'Archiv-Sorte'):' · Elternlinie')+(isHub?' · '+d+' direkte Verbindungen':'');
    out+='<g class="'+classes+'" data-node="'+esc(n.key)+'" tabindex="0" role="button" aria-label="'+esc(title)+'" transform="translate('+n.x.toFixed(2)+' '+n.y.toFixed(2)+')"><title>'+esc(title)+'</title>';
    if(isSelected)out+='<circle class="node-selection" r="'+(radius+8)+'"/>';
    if(n.placeholder)out+='<circle class="node-dot parent-dot" r="'+radius+'"/>';
    else out+='<circle class="node-dot archive-dot" r="'+radius+'"/>';
-   {const label=n.name.length>22?n.name.slice(0,20)+'…':n.name;const labelClass='node-label'+(n.placeholder?' parent-label':'')+(isSelected?' active':'');out+='<text class="'+labelClass+'" y="'+(radius+(isSelected?18:15))+'">'+esc(label)+'</text>';}
+   {const label=n.name.length>22?n.name.slice(0,20)+'…':n.name;const labelClass='node-label'+(n.placeholder?' parent-label':'')+(isHub?' hub-label':'')+(isSelected?' active':'');out+='<text class="'+labelClass+'" y="'+(radius+(isSelected?18:15))+'">'+esc(label)+'</text>';}
    out+='</g>';
  });
  out+='</g>';svg.innerHTML=out;updateNetView();
