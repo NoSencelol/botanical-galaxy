@@ -555,11 +555,9 @@ function buildNetwork(){
      s.parent2||s.parent_2||s.parentB||(Array.isArray(s.parents)?s.parents[1]:'')
    ].filter(Boolean).flatMap(split);
    const parentNames=[...explicitParents,...split(s.genetics||s.cross||s.lineage||s.geneticLineage)];
-   // Standard lineage fallback for the well-known Purple Punch cultivar, only when parent data is missing.
+   // Purple Punch: use one canonical parent pair and discard parsed duplicates or variants.
    if(norm(s.name)==='purple punch'){
-     ['Granddaddy Purple','Larry OG'].forEach(parent=>{
-       if(!parentNames.some(existing=>identity(existing)===identity(parent)))parentNames.push(parent);
-     });
+     parentNames.splice(0,parentNames.length,'Granddaddy Purple','Larry OG');
    }
    const seen=new Set();
    parentNames.forEach(parent=>{
