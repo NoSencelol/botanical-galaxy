@@ -206,6 +206,35 @@ dialog{background:linear-gradient(145deg,#18271d,#0f1913);border-color:#607c61;b
  *,*:before,*:after{animation-duration:.01ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important;transition-duration:.01ms!important}
 }
 
+
+/* Deep-space rendering: sichtbar plastisch statt flacher SVG-Punkte */
+.network-panel{background:radial-gradient(ellipse at 18% 0%,#45657a55,transparent 40%),radial-gradient(ellipse at 82% 100%,#4b665b38,transparent 38%),linear-gradient(145deg,#0a1520,#080d14 62%,#101720);border-color:#667f91;box-shadow:inset 0 1px 0 #ffffff20,0 28px 75px #0009}
+.network-panel .network-top h3{font-family:Georgia,'Times New Roman',serif;font-size:29px;font-weight:500;letter-spacing:-.025em}
+.network-canvas{height:620px;isolation:isolate;background:radial-gradient(ellipse at 21% 24%,#728cac70 0,transparent 34%),radial-gradient(ellipse at 76% 68%,#8b648c4d 0,transparent 38%),radial-gradient(ellipse at 50% 48%,#263d50 0,#111e2b 46%,#050a11 100%);border-color:#6c879c;box-shadow:inset 0 0 130px #02050bbf,inset 0 0 35px #a0bdd01a,0 25px 60px #0009}
+.network-canvas:before{content:'';position:absolute;inset:-12%;z-index:0;pointer-events:none;opacity:.48;filter:blur(16px);background:radial-gradient(ellipse at 18% 28%,#91a8c755 0,transparent 30%),radial-gradient(ellipse at 72% 70%,#9b719c44 0,transparent 32%),radial-gradient(ellipse at 50% 48%,#649b8e30 0,transparent 38%);animation:nebulaDrift 24s ease-in-out infinite alternate}
+.network-canvas:after{z-index:2;content:'';background:radial-gradient(ellipse at center,transparent 38%,#02060bd9 100%),linear-gradient(180deg,#08131a10,transparent 32%,#02070b35)}
+#networkSvg{position:relative;z-index:1}
+.deep-space .distant-star{animation:starFlicker 5s ease-in-out infinite alternate;transform-box:fill-box;transform-origin:center}
+.deep-space .distant-star:nth-child(3n){animation-delay:-2.2s}.deep-space .distant-star:nth-child(5n){animation-delay:-3.7s}
+.net-edge{stroke:url(#connectionGradient);stroke-width:1.45;stroke-linecap:round;opacity:.88;stroke-dasharray:2 10;filter:drop-shadow(0 0 4px #b9d5efaa);animation:laneFlow 22s linear infinite}
+.net-edge.fine{stroke:#edf6ff;stroke-width:.55;opacity:.46;stroke-dasharray:1 0;filter:drop-shadow(0 0 7px #c8e5ff)}
+.net-edge.root-shadow{stroke:#547d91;stroke-width:8;opacity:.2;stroke-dasharray:1 0;filter:blur(5px)}
+.travel-light{opacity:.86}
+.net-node{cursor:pointer;transition:filter .3s ease}
+.net-node .planet-aura{pointer-events:none;filter:blur(2px);opacity:.95}
+.net-node .sphere{stroke:#e4f3ed66;stroke-width:.8;filter:drop-shadow(0 0 8px #9ed0c377)}
+.net-node.placeholder .sphere{stroke:#bdd7e9aa;stroke-width:1}
+.net-node.hub .sphere{stroke:#fff0b9;stroke-width:1.4;filter:drop-shadow(0 0 10px #ffdf91) drop-shadow(0 0 25px #e9bf6a)}
+.net-node .planet-orbit{filter:drop-shadow(0 0 5px #b2d8f0aa)}
+.net-node .corona{animation:coronaTurn 24s linear infinite;transform-origin:center}
+.net-node:hover{filter:brightness(1.2) drop-shadow(0 0 18px #d4ebff88)}
+.net-node text{font-family:Georgia,'Times New Roman',serif;font-size:15px;fill:#f4f7fb;stroke:#071018;stroke-width:4px;paint-order:stroke;letter-spacing:.01em}
+.net-node .small{font-family:Inter,system-ui,sans-serif;font-size:10px;fill:#c1cfdb;stroke:#08111a;stroke-width:3px;letter-spacing:.06em}
+@keyframes nebulaDrift{from{transform:translate3d(-1.5%,.5%,0) scale(1)}to{transform:translate3d(2%,-1%,0) scale(1.08)}}
+@keyframes starFlicker{0%,100%{opacity:.28}50%{opacity:1}}
+@keyframes coronaTurn{to{transform:rotate(360deg)}}
+@media(max-width:570px){.network-canvas{height:490px}.net-node text{font-size:13px}.net-node .small{font-size:9px}}
+@media(prefers-reduced-motion:reduce){.network-canvas:before,.deep-space .distant-star,.net-edge,.net-node .corona{animation:none!important}}
 </style>
 </head>
 <body>
@@ -482,35 +511,56 @@ function buildNetwork(){
    }
  });
  const byKey=new Map(arr.map(n=>[n.key,n]));
- let out='<defs><filter id="glow"><feGaussianBlur stdDeviation="5" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs><g id="networkWorld">';
- // Sternenfeld: dezente Hintergrundsterne als Orientierung im Raum.
- const starSeed=(i)=>{const x=(i*137.508)%worldW,y=(i*91.713+47)%worldH,r=0.7+(i%4)*.35;return `<circle cx="${x}" cy="${y}" r="${r}" fill="#c8d8ff" opacity="${.18+(i%5)*.09}"/>`};
- out+=`<g class="deep-space">${Array.from({length:Math.min(150,Math.max(70,Math.floor(worldW*worldH/9000)))},(_,i)=>starSeed(i)).join('')}</g>`;
- // Verbindungen als feine leuchtende Bahnen zwischen Sternensystemen.
+ let out='<defs>' +
+  '<radialGradient id="sphereCollection" cx="31%" cy="25%" r="78%"><stop offset="0" stop-color="#f1ffe0"/><stop offset=".13" stop-color="#c7f0a9"/><stop offset=".38" stop-color="#78b77e"/><stop offset=".7" stop-color="#315c43"/><stop offset="1" stop-color="#09170f"/></radialGradient>' +
+  '<radialGradient id="sphereParent" cx="30%" cy="23%" r="78%"><stop offset="0" stop-color="#f4fbff"/><stop offset=".16" stop-color="#b8d6e5"/><stop offset=".42" stop-color="#66869c"/><stop offset=".76" stop-color="#273b4c"/><stop offset="1" stop-color="#09121d"/></radialGradient>' +
+  '<radialGradient id="sphereHub" cx="32%" cy="23%" r="78%"><stop offset="0" stop-color="#fffef0"/><stop offset=".15" stop-color="#fff0b6"/><stop offset=".42" stop-color="#efc967"/><stop offset=".74" stop-color="#a96a32"/><stop offset="1" stop-color="#271a16"/></radialGradient>' +
+  '<radialGradient id="auraGreen"><stop offset="0" stop-color="#a9e7a6" stop-opacity=".35"/><stop offset=".42" stop-color="#83c3a0" stop-opacity=".12"/><stop offset="1" stop-color="#83c3a0" stop-opacity="0"/></radialGradient>' +
+  '<radialGradient id="auraBlue"><stop offset="0" stop-color="#b9dfff" stop-opacity=".3"/><stop offset=".5" stop-color="#86bce8" stop-opacity=".1"/><stop offset="1" stop-color="#86bce8" stop-opacity="0"/></radialGradient>' +
+  '<radialGradient id="auraGold"><stop offset="0" stop-color="#ffe9a5" stop-opacity=".54"/><stop offset=".48" stop-color="#ffcf70" stop-opacity=".16"/><stop offset="1" stop-color="#ffcf70" stop-opacity="0"/></radialGradient>' +
+  '<linearGradient id="connectionGradient" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#9cd4b0" stop-opacity=".14"/><stop offset=".48" stop-color="#d8e9dc" stop-opacity=".92"/><stop offset="1" stop-color="#a3c8ed" stop-opacity=".22"/></linearGradient>' +
+  '<filter id="glow"><feGaussianBlur stdDeviation="5" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>' +
+  '<filter id="bloom"><feGaussianBlur stdDeviation="12"/></filter>' +
+  '<filter id="softShadow" x="-80%" y="-80%" width="260%" height="260%"><feGaussianBlur in="SourceAlpha" stdDeviation="7" result="blur"/><feOffset dy="7" result="off"/><feComponentTransfer in="off"><feFuncA type="linear" slope=".42"/></feComponentTransfer><feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge></filter>' +
+  '<clipPath id="sphereClip"><circle r="34"/></clipPath>' +
+ '</defs><g id="networkWorld">';
+ // Atmosphärische Nebelwolken und feine Sternenfelder für mehr räumliche Tiefe.
+ out+='<g class="nebula" pointer-events="none">' +
+  '<ellipse cx="'+(worldW*.24)+'" cy="'+(worldH*.3)+'" rx="'+(worldW*.21)+'" ry="'+(worldH*.19)+'" fill="#668bb7" opacity=".16" filter="url(#bloom)"/>' +
+  '<ellipse cx="'+(worldW*.72)+'" cy="'+(worldH*.69)+'" rx="'+(worldW*.25)+'" ry="'+(worldH*.22)+'" fill="#7a568e" opacity=".13" filter="url(#bloom)"/>' +
+  '<ellipse cx="'+(worldW*.52)+'" cy="'+(worldH*.47)+'" rx="'+(worldW*.17)+'" ry="'+(worldH*.15)+'" fill="#527f78" opacity=".1" filter="url(#bloom)"/></g>';
+ const starSeed=(i)=>{const x=(i*137.508+23)%worldW,y=(i*91.713+47)%worldH,r=i%23===0?1.8:(.45+(i%5)*.22),op=.18+(i%7)*.075;return i%23===0?`<g class="distant-star" opacity="${op}"><circle cx="${x}" cy="${y}" r="${r}" fill="#f2f7ff"/><path d="M ${x-r*3} ${y} H ${x+r*3} M ${x} ${y-r*3} V ${y+r*3}" stroke="#dbeeff" stroke-width=".55"/></g>`:`<circle class="distant-star" cx="${x}" cy="${y}" r="${r}" fill="#dceaff" opacity="${op}"/>`};
+ out+=`<g class="deep-space">${Array.from({length:Math.min(260,Math.max(110,Math.floor(worldW*worldH/5200)))},(_,i)=>starSeed(i)).join('')}</g>`;
+ // Sanfte, leicht gekrümmte Lichtbahnen statt harter, gestrichelter Verbindungslinien.
  links.forEach((e,i)=>{
    const a=byKey.get(e.from),b=byKey.get(e.to);if(!a||!b)return;
    const dx=b.x-a.x,dy=b.y-a.y,len=Math.sqrt(dx*dx+dy*dy)||1;
-   const nx=-dy/len,ny=dx/len;
-   const bend=((i%2)?1:-1)*Math.min(48,len*.19);
+   const nx=-dy/len,ny=dx/len,bend=((i%2)?1:-1)*Math.min(58,len*.2);
    const mx=(a.x+b.x)/2+nx*bend,my=(a.y+b.y)/2+ny*bend;
    const d=`M ${a.x} ${a.y} Q ${mx} ${my} ${b.x} ${b.y}`;
    out+=`<path class="net-edge root-shadow" d="${d}"/><path class="net-edge" d="${d}"/><path class="net-edge fine" d="${d}"/>`;
+   out+=`<circle class="travel-light" r="2.5" fill="#f2ffe8" filter="url(#glow)"><animateMotion dur="${5+i*1.3}s" repeatCount="indefinite" path="${d}"/></circle>`;
  });
- // Knotenpunkte: große, mehrfach verbundene Sorten werden zu hellen Leitsternen.
+ // Kugelförmige Himmelskörper mit Lichtkante, Schatten und Atmosphärenhalo.
  arr.forEach(n=>{
    const isParent=n.placeholder,connections=degree.get(n.key)||0,hub=!isParent&&connections>=2;
    const label=n.name.length>20?n.name.slice(0,18)+'…':n.name;
-   const r=isParent?18:(hub?29:22);
+   const r=isParent?19:(hub?31:24);
    const detail=n.strain?`${n.name} · ${n.strain.type||'Kategorie unbekannt'} · ${n.strain.breeder||'Breeder unbekannt'}${n.strain.genetics?' · '+n.strain.genetics:''}${n.strain.parent1||n.strain.parent2?' · Eltern: '+[n.strain.parent1,n.strain.parent2].filter(Boolean).join(' × '):''}`:`${n.name} · Noch kein eigener Sorteneintrag`;
-   out+=`<g class="net-node ${isParent?'placeholder':''} ${hub?'hub':''}" data-node="${esc(n.key)}" tabindex="0" role="button" aria-label="${esc(detail)}" transform="translate(${n.x},${n.y})"><title>${esc(detail)} — Anklicken zum Öffnen</title>
-     ${hub?`<circle class="halo" r="${r+12}"/><path d="M 0 ${-r-9} L 3 ${-5} L ${r+9} 0 L 5 3 L 0 ${r+9} L -3 5 L ${-r-9} 0 L -5 -3 Z" fill="#ffe8ad" opacity=".7"/>`:''}
-     <circle r="${r}" filter="url(#glow)"/>
-     ${isParent?`<circle r="5" fill="#b9c9f5" stroke="none"/>`:`<circle r="${hub?7:5}" fill="${hub?'#fff7d9':'#ffffff'}" stroke="none"/>`}
-     <text y="${r+18}">${esc(label)}</text>
-     <text class="small" y="${r+32}">${isParent?'Unbekannte Linie':(hub?'Schlüssel-Sorte':'Sorte')}</text>
-   </g>`;
+   const sphere=isParent?'sphereParent':(hub?'sphereHub':'sphereCollection');
+   const aura=isParent?'auraBlue':(hub?'auraGold':'auraGreen');
+   out+=`<g class="net-node ${isParent?'placeholder':''} ${hub?'hub':''}" data-node="${esc(n.key)}" tabindex="0" role="button" aria-label="${esc(detail)}" transform="translate(${n.x},${n.y})"><title>${esc(detail)} — Anklicken zum Öffnen</title>`;
+   out+=`<circle class="planet-aura" r="${r*2.5}" fill="url(#${aura})"/>`;
+   if(hub)out+=`<circle class="corona" r="${r+15}" fill="none" stroke="#f2d995" stroke-width="1" opacity=".5" stroke-dasharray="1 7"/>`;
+   if(isParent)out+=`<ellipse class="planet-orbit" rx="${r+10}" ry="${r*.42}" transform="rotate(-24)" fill="none" stroke="#a8c5de" stroke-width="1.1" opacity=".48"/>`;
+   out+=`<ellipse cx="3" cy="${r*.9}" rx="${r*.88}" ry="${r*.24}" fill="#02070d" opacity=".42" filter="url(#bloom)"/>`;
+   out+=`<circle class="sphere" r="${r}" style="fill:url(#${sphere})" filter="url(#softShadow)"/>`;
+   out+=`<g clip-path="url(#sphereClip)"><ellipse cx="-${r*.32}" cy="-${r*.43}" rx="${r*.49}" ry="${r*.26}" fill="#ffffff" opacity=".23" filter="url(#bloom)"/><path d="M ${-r*.8} ${-r*.1} Q ${-r*.25} ${-r*.55} ${r*.48} ${-r*.18}" fill="none" stroke="#ffffff" stroke-width="${r*.11}" opacity=".11"/><path d="M ${-r*.8} ${r*.15} Q 0 ${r*.38} ${r*.8} ${-r*.08}" fill="none" stroke="#dff4e0" stroke-width="${r*.045}" opacity=".13"/></g>`;
+   out+=`<ellipse cx="-${r*.32}" cy="-${r*.42}" rx="${r*.19}" ry="${r*.1}" fill="#fff" opacity=".48" filter="url(#bloom)"/>`;
+   if(hub)out+=`<path class="star-rays" d="M 0 ${-r-17} L 2 ${-5} L ${r+17} 0 L 5 2 L 0 ${r+17} L -2 5 L ${-r-17} 0 L -5 -2 Z" fill="#ffe6a3" opacity=".18" filter="url(#glow)"/>`;
+   out+=`<circle class="inner-core" r="${hub?4.5:3}" fill="#f8fff1" opacity=".72"/>`;
+   out+=`<text y="${r+19}">${esc(label)}</text><text class="small" y="${r+33}">${isParent?'Elternlinie · nicht angelegt':(hub?'Schlüssel-Sorte':'Gespeicherte Sorte')}</text></g>`;
  });
- out+='</g>';svg.innerHTML=out;updateNetView();
  const activateNode=el=>{
    const n=byKey.get(el.dataset.node);if(!n)return;
    if(n.strain)openEditor(n.strain);
