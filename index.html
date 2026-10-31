@@ -255,7 +255,7 @@ dialog{background:linear-gradient(145deg,#18271d,#0f1913);border-color:#607c61;b
 .web-edge.cross-edge{stroke:#f4c43b;stroke-width:1.25;opacity:.78;filter:drop-shadow(0 0 3px #f4c43b55)}
 .web-node{cursor:pointer;outline:none;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}.web-node *,.node-label,.family-chip,.family-chip span,.web-selected-panel h3,.card h3{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
 .web-node .node-dot{vector-effect:non-scaling-stroke}
-.web-node.hub-node .archive-dot{fill:#ffe079;stroke:#fff0b7;stroke-width:1.1;filter:drop-shadow(0 0 5px #f5d35d) drop-shadow(0 0 11px #d6a93488)}
+.web-node.hub-node .archive-dot{fill:#ffe079;stroke:#fff0b7;stroke-width:1.5;filter:drop-shadow(0 0 6px #f5d35d) drop-shadow(0 0 13px #d6a934aa)}.web-node.hub-node .parent-dot{fill:#090b08;stroke:#ffe079;stroke-width:2.2;filter:drop-shadow(0 0 6px #f5d35d) drop-shadow(0 0 12px #d6a934aa)}.hub-halo{fill:none;stroke:#f5d35d;stroke-width:1;opacity:.9;filter:drop-shadow(0 0 5px #f5d35d)}
 .archive-dot{fill:#f5c637;stroke:#f5c637;stroke-width:.6;filter:drop-shadow(0 0 2px #f5c63755)}
 .parent-dot{fill:#050505;stroke:#aaa9a3;stroke-width:1.15}
 .web-node.ancestor-node .archive-dot{fill:#fff;stroke:#fff;filter:drop-shadow(0 0 5px #fff)}
@@ -653,8 +653,8 @@ function buildNetwork(){
  const componentOf=new Map();
  components.forEach((group,i)=>group.forEach(n=>componentOf.set(n.key,i)));
  const familyCounts=components.map(group=>group.length);
- const degree=new Map(arr.map(n=>[n.key,0]));
- edges.forEach(e=>{degree.set(e.from,(degree.get(e.from)||0)+1);degree.set(e.to,(degree.get(e.to)||0)+1)});
+ // Count unique direct neighbours, including external parent-line nodes.
+ const degree=new Map(arr.map(n=>[n.key,adjacency.get(n.key)?.size||0]));
 
  // The layout is a single connected web, with separate families arranged around the same map.
  const worldW=Math.max(1200,Math.ceil(Math.sqrt(arr.length))*105);
@@ -768,11 +768,12 @@ function buildNetwork(){
    const isSelected=n.key===selected,isAnc=ancestors.has(n.key),isCross=descendants.has(n.key)&&!isSelected;
    const d=degree.get(n.key)||0;
    // Alle normalen Archivsorten bleiben identisch. Nur echte Knoten mit 4+ direkten Verbindungen werden hervorgehoben.
-   const isHub=!n.placeholder&&d>=4;
-   const radius=n.placeholder?3.1:(isHub?7.5:3.2);
+   const isHub=d>=4;
+   const radius=isHub?8.2:(n.placeholder?3.1:3.2);
    const classes='web-node '+(n.placeholder?'parent-node ':'archive-node ')+(isHub?'hub-node ':'')+(isSelected?'selected-node ':isAnc?'ancestor-node ':isCross?'cross-node ':'');
    const title=n.name+(n.strain?' · '+(n.strain.breeder||'Archiv-Sorte'):' · Elternlinie')+(isHub?' · '+d+' direkte Verbindungen':'');
    out+='<g class="'+classes+'" data-node="'+esc(n.key)+'" tabindex="0" role="button" aria-label="'+esc(title)+'" transform="translate('+n.x.toFixed(2)+' '+n.y.toFixed(2)+')"><title>'+esc(title)+'</title>';
+   if(isHub)out+='<circle class="hub-halo" r="'+(radius+5)+'"/>';
    if(isSelected)out+='<circle class="node-selection" r="'+(radius+8)+'"/>';
    if(n.placeholder)out+='<circle class="node-dot parent-dot" r="'+radius+'"/>';
    else out+='<circle class="node-dot archive-dot" r="'+radius+'"/>';
