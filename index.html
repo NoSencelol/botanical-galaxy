@@ -253,7 +253,7 @@ dialog{background:linear-gradient(145deg,#18271d,#0f1913);border-color:#607c61;b
 .web-edge{stroke:#98721e;stroke-width:1.05;opacity:.42;fill:none;vector-effect:non-scaling-stroke}
 .web-edge.ancestor-edge{stroke:#f1f1ec;stroke-width:1.3;opacity:.83;filter:drop-shadow(0 0 3px #fff8)}
 .web-edge.cross-edge{stroke:#f4c43b;stroke-width:1.25;opacity:.78;filter:drop-shadow(0 0 3px #f4c43b55)}
-.web-node{cursor:pointer;outline:none;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}.web-node *,.node-label,.family-chip,.family-chip span,.web-selected-panel h3,.card h3{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
+.web-node{cursor:pointer;outline:none;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;transition:opacity .18s ease}.web-node *,.node-label,.family-chip,.family-chip span,.web-selected-panel h3,.card h3{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
 .web-node .node-dot{vector-effect:non-scaling-stroke}
 .web-node.hub-node .archive-dot{fill:#ffe079;stroke:#fff0b7;stroke-width:1.5;filter:drop-shadow(0 0 6px #f5d35d) drop-shadow(0 0 13px #d6a934aa)}.web-node.hub-node .parent-dot{fill:#090b08;stroke:#ffe079;stroke-width:2.2;filter:drop-shadow(0 0 6px #f5d35d) drop-shadow(0 0 12px #d6a934aa)}.hub-halo{fill:none;stroke:#f5d35d;stroke-width:1;opacity:.9;filter:drop-shadow(0 0 5px #f5d35d)}
 .archive-dot{fill:#f5c637;stroke:#f5c637;stroke-width:.6;filter:drop-shadow(0 0 2px #f5c63755)}
@@ -578,6 +578,35 @@ function updateNetView(){
  const world=$('networkWorld');
  if(world)world.setAttribute('transform',`translate(${netPanX} ${netPanY}) scale(${netZoom})`);
  const readout=$('zoomReadout');if(readout)readout.textContent=Math.round(netZoom*100)+'%';
+
+ // Progressive detail levels: hubs first, then archive strains, shared parents, and all parent lines.
+ const svg=$('networkSvg');
+ if(svg){
+  const nodeEls=[...svg.querySelectorAll('[data-node]')];
+  const hubs=nodeEls.filter(el=>el.dataset.hub==='1');
+  const archiveEls=nodeEls.filter(el=>el.dataset.nodeKind==='archive');
+  const maxArchiveDegree=archiveEls.reduce((max,el)=>Math.max(max,Number(el.dataset.degree)||0),0);
+  const detailLevel=netZoom<.82?0:netZoom<1.12?1:netZoom<1.62?2:3;
+  const visible=new Set();
+  nodeEls.forEach(el=>{
+   const kind=el.dataset.nodeKind;
+   const degree=Number(el.dataset.degree)||0;
+   let show=false;
+   if(el.dataset.node===networkSelected)show=true;
+   else if(detailLevel===0){
+    show=el.dataset.hub==='1'||(!hubs.length&&kind==='archive'&&(maxArchiveDegree===0||degree===maxArchiveDegree));
+   }else if(detailLevel===1){
+    show=kind==='archive';
+   }else if(detailLevel===2){
+    show=kind==='archive'||(kind==='parent'&&degree>=2);
+   }else show=true;
+   el.style.display=show?'':'none';
+   if(show)visible.add(el.dataset.node);
+  });
+  svg.querySelectorAll('[data-edge-from][data-edge-to]').forEach(edge=>{
+   edge.style.display=visible.has(edge.dataset.edgeFrom)&&visible.has(edge.dataset.edgeTo)?'':'none';
+  });
+ }
 }
 function changeNetZoom(next){
  const old=netZoom;netZoom=Math.max(.55,Math.min(3.2,next));
@@ -762,7 +791,7 @@ function buildNetwork(){
    const isAnc=selected&&(ancestors.has(e.from)||e.from===selected)&&(ancestors.has(e.to)||e.to===selected);
    const isCross=selected&&(descendants.has(e.from)||e.from===selected)&&(descendants.has(e.to)||e.to===selected);
    const cls=isAnc?'web-edge ancestor-edge':isCross?'web-edge cross-edge':'web-edge';
-   out+='<line class="'+cls+'" x1="'+a.x.toFixed(2)+'" y1="'+a.y.toFixed(2)+'" x2="'+b.x.toFixed(2)+'" y2="'+b.y.toFixed(2)+'"/>';
+   out+='<line class="'+cls+'" data-edge-from="'+esc(e.from)+'" data-edge-to="'+esc(e.to)+'" x1="'+a.x.toFixed(2)+'" y1="'+a.y.toFixed(2)+'" x2="'+b.x.toFixed(2)+'" y2="'+b.y.toFixed(2)+'"/>';
  });
  arr.forEach(n=>{
    const isSelected=n.key===selected,isAnc=ancestors.has(n.key),isCross=descendants.has(n.key)&&!isSelected;
@@ -772,7 +801,7 @@ function buildNetwork(){
    const radius=isHub?8.2:(n.placeholder?3.1:3.2);
    const classes='web-node '+(n.placeholder?'parent-node ':'archive-node ')+(isHub?'hub-node ':'')+(isSelected?'selected-node ':isAnc?'ancestor-node ':isCross?'cross-node ':'');
    const title=n.name+(n.strain?' · '+(n.strain.breeder||'Archiv-Sorte'):' · Elternlinie')+(isHub?' · '+d+' direkte Verbindungen':'');
-   out+='<g class="'+classes+'" data-node="'+esc(n.key)+'" tabindex="0" role="button" aria-label="'+esc(title)+'" transform="translate('+n.x.toFixed(2)+' '+n.y.toFixed(2)+')"><title>'+esc(title)+'</title>';
+   out+='<g class="'+classes+'" data-node="'+esc(n.key)+'" data-node-kind="'+(n.placeholder?'parent':'archive')+'" data-degree="'+d+'" data-hub="'+(isHub?'1':'0')+'" tabindex="0" role="button" aria-label="'+esc(title)+'" transform="translate('+n.x.toFixed(2)+' '+n.y.toFixed(2)+')"><title>'+esc(title)+'</title>';
    if(isHub)out+='<circle class="hub-halo" r="'+(radius+5)+'"/>';
    if(isSelected)out+='<circle class="node-selection" r="'+(radius+8)+'"/>';
    if(n.placeholder)out+='<circle class="node-dot parent-dot" r="'+radius+'"/>';
